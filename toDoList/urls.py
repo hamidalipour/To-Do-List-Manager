@@ -17,6 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from personalToDoList import views as personalToDoListView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', personalToDoListView.login_page, name='login'),
 ]
