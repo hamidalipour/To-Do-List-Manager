@@ -22,4 +22,7 @@ from personalToDoList import views as personalToDoListView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', personalToDoListView.login_page, name='login'),
+    path('to-do-lists', personalToDoListView.to_do_lists_page, name='to-do-lists-page'),
+    path('/to-do-lists/<int:id>/', personalToDoListView.tasks_page, name='tasks-page'),
+    path('create-to-do-list/<int:id>', personalToDoListView.create_to_do_list, name='create-to-do-list'),
 ]
