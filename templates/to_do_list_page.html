@@ -1,3 +1,4 @@
+{% extends 'base.html' %}
 {% block content %}
     <h1>Your toDo lists</h1>
     <ul>
@@ -5,5 +6,5 @@
             <li><a href="{% url 'tasks-page' to_do_list.id %}">{{ to_do_list.title }}</a></li>
         {% endfor %}
     </ul>
-    <a href="{% url 'create-to-do-list' user.id %}">Create a new toDo list</a>
+    <a href="{% url 'create-to-do-list'%}">Create a new toDo list</a>
 {% endblock %}

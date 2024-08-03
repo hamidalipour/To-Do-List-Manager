@@ -33,11 +33,22 @@ def to_do_lists_page(request):
     else:
         to_do_lists = ToDoList.objects.filter(user=user)
         url = "http://localhost:8000"
-        return render(request, 'to_do_list_page.html', context={'to_do_lists': to_do_lists, 'user': user})
+        return render(request, 'to_do_list_page.html', context={'to_do_lists': to_do_lists})
 
-def tasks_page(request, id):
-    print(id)
+
+def tasks_page(request, list_id):
     return render(request, 'base.html')
 
+
 def create_to_do_list(request):
-    pass
+    form = forms.ToDoListForm()
+    if request.method == 'POST':
+        form = forms.ToDoListForm(request.POST)
+        if form.is_valid():
+            _list = form.save(commit=False)
+            _list.user = request.user
+            _list.save()
+            return redirect("http://localhost:8000/to-do-lists")
+        else:
+            return redirect("http://localhost:8000/create-to-do-list/")
+    return render(request, 'create_to_do_list.html', context={'form': form})
