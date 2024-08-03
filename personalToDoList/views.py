@@ -23,4 +23,5 @@ def login_page(request):
         request, 'login.html', context={'form': form, 'message': message})
 
 
-
+def to_do_lists_page(request):
+    form = forms.ToDoListForm()
