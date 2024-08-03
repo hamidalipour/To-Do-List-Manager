@@ -1,0 +1,14 @@
+{% block content %}
+    <h1>Your tasks</h1>
+        {% for task in tasks %}
+            <div style="margin-bottom: 78px; border: 1px solid #979797">
+                <p>task id: {{ task.id }}</p>
+                <p>title: {{ task.title }}</p>
+                <p>description {{ task.description }}</p>
+                <p>task is done: {{ task.done }}</p>
+                <p>due date: {{ task.due_date }}</p>
+                <p>is priority: {{ task.is_priority }}</p>
+            </div>
+        {% endfor %}
+    <a href="{% url 'create-to-do-list'%}">Create a new toDo list</a>
+{% endblock %}
