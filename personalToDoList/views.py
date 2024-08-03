@@ -43,7 +43,7 @@ def tasks_page(request, list_id):
         return redirect("http://localhost:8000/admin")
     else:
         tasks = Task.objects.filter(toDoList__id=list_id).order_by('due_date', '-is_priority')
-        return render(request, 'tasks.html', context={'tasks': tasks})
+        return render(request, 'tasks.html', context={'tasks': tasks, 'list_id': list_id})
 
 
 def create_to_do_list(request):
@@ -60,3 +60,19 @@ def create_to_do_list(request):
         else:
             return redirect("http://localhost:8000/create-to-do-list/")
     return render(request, 'create_to_do_list.html', context={'form': form})
+
+
+def create_task(request, list_id):
+    if not request.user.is_authenticated:
+        return redirect("http://localhost:8000/admin")
+    form = forms.TaskForm()
+    if request.method == 'POST':
+        form = forms.TaskForm(request.POST)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.toDoList = ToDoList.objects.get(id=list_id)
+            task.save()
+            return redirect(f"http://localhost:8000/to-do-lists/{list_id}")
+        else:
+            return redirect("http://localhost:8000/create-tasks/")
+    return render(request, 'create_task.html', context={'form': form})

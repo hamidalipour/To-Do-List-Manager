@@ -10,5 +10,5 @@
                 <p>is priority: {{ task.is_priority }}</p>
             </div>
         {% endfor %}
-    <a href="{% url 'create-to-do-list'%}">Create a new toDo list</a>
+    <a href="{% url 'create-task' list_id%}">Create a new task</a>
 {% endblock %}
