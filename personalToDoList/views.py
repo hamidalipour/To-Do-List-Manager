@@ -110,20 +110,23 @@ def handle_task(request, task_id):
 
 class BaseView(View):
     def check_authentication(self, request):
-        if not request.user.is_authenticated:
-            return redirect("http://localhost:8000/admin")
+        if request.user.is_authenticated:
+            return True
+        return False
 
 
 class ToDoListsPageView(BaseView):
     def get(self, request):
-        self.check_authentication(request)
+        if not self.check_authentication(request):
+            return redirect("http://localhost:8000/admin")
         to_do_lists = ToDoList.objects.filter(user=request.user)
         return render(request, 'to-do-list-page-v2.html', context={'to_do_lists': to_do_lists})
 
 
 class TasksPageView(BaseView):
     def get(self, request, list_id):
-        self.check_authentication(request)
+        if not self.check_authentication(request):
+            return redirect("http://localhost:8000/admin")
         tasks = Task.objects.filter(toDoLists__id=list_id).order_by('due_date', '-is_priority')
         form = forms.TokenForm()
         message = ''
@@ -131,7 +134,8 @@ class TasksPageView(BaseView):
             request, 'tasks-v2.html', context={'tasks': tasks, 'list_id': list_id, 'form': form, 'message': message})
 
     def post(self, request, list_id):
-        self.check_authentication(request)
+        if not self.check_authentication(request):
+            return redirect("http://localhost:8000/admin")
         tasks = Task.objects.filter(toDoLists__id=list_id).order_by('due_date', '-is_priority')
         message = ''
         form = forms.TokenForm(request.POST)
@@ -152,12 +156,14 @@ class TasksPageView(BaseView):
 
 class CreateToDoListView(BaseView):
     def get(self, request):
-        self.check_authentication(request)
+        if not self.check_authentication(request):
+            return redirect("http://localhost:8000/admin")
         form = forms.ToDoListForm()
         return render(request, 'create-to-do-list.html', context={'form': form})
 
     def post(self, request):
-        self.check_authentication(request)
+        if not self.check_authentication(request):
+            return redirect("http://localhost:8000/admin")
         form = forms.ToDoListForm(request.POST)
         if form.is_valid():
             _list = form.save(commit=False)
@@ -170,12 +176,14 @@ class CreateToDoListView(BaseView):
 
 class CreateTaskView(BaseView):
     def get(self, request, list_id):
-        self.check_authentication(request)
+        if not self.check_authentication(request):
+            return redirect("http://localhost:8000/admin")
         form = forms.TaskForm()
         return render(request, 'create-task.html', context={'form': form})
 
     def post(self, request, list_id):
-        self.check_authentication(request)
+        if not self.check_authentication(request):
+            return redirect("http://localhost:8000/admin")
         form = forms.TaskForm(request.POST)
         if form.is_valid():
             task = form.save(commit=False)
@@ -188,13 +196,15 @@ class CreateTaskView(BaseView):
 
 class HandleTaskView(BaseView):
     def get(self, request, task_id):
-        self.check_authentication(request)
+        if not self.check_authentication(request):
+            return redirect("http://localhost:8000/admin")
         token = None
         task = Task.objects.get(id=task_id)
         return render(request, 'handle-task.html', context={'task': task, 'token': token})
 
     def post(self, request, task_id):
-        self.check_authentication(request)
+        if not self.check_authentication(request):
+            return redirect("http://localhost:8000/admin")
         task = Task.objects.get(id=task_id)
         token = Token.objects.create(task=task)
         return render(request, 'handle-task.html', context={'task': task, 'token': token})
