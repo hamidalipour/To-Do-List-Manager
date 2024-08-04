@@ -1,0 +1,19 @@
+{% block content %}
+    <h1>Your task</h1>
+        <div style="margin-bottom: 78px; border: 1px solid #979797">
+            <p>task id: {{ task.id }}</p>
+            <p>title: {{ task.title }}</p>
+            <p>description {{ task.description }}</p>
+            <p>task is done: {{ task.done }}</p>
+            <p>due date: {{ task.due_date }}</p>
+            <p>is priority: {{ task.is_priority }}</p>
+            {% if token != None %}
+                <p>token: {{ token.uuid }}</p>
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" >Create token</button>
+            </form>
+            
+        </div>
+{% endblock %}

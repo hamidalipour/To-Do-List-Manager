@@ -26,4 +26,5 @@ urlpatterns = [
     path('to-do-lists/<int:list_id>/', personalToDoListView.tasks_page, name='tasks-page'),
     path('create-to-do-list/', personalToDoListView.create_to_do_list, name='create-to-do-list'),
     path('create-tasks/<int:list_id>', personalToDoListView.create_task, name="create-task"),
+    path('handle-task/<int:task_id>', personalToDoListView.handle_task, name='handle-task'),
 ]

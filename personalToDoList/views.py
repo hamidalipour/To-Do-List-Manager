@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 
 from . import forms
 from django.contrib.auth import login, authenticate
-from personalToDoList.models import ToDoList, Task
+from personalToDoList.models import ToDoList, Task, Token
 
 
 def check_user_authentication(user):
@@ -42,7 +42,7 @@ def tasks_page(request, list_id):
     if not request.user.is_authenticated:
         return redirect("http://localhost:8000/admin")
     else:
-        tasks = Task.objects.filter(toDoList__id=list_id).order_by('due_date', '-is_priority')
+        tasks = Task.objects.filter(toDoLists__id=list_id).order_by('due_date', '-is_priority')
         return render(request, 'tasks.html', context={'tasks': tasks, 'list_id': list_id})
 
 
@@ -70,9 +70,20 @@ def create_task(request, list_id):
         form = forms.TaskForm(request.POST)
         if form.is_valid():
             task = form.save(commit=False)
-            task.toDoList = ToDoList.objects.get(id=list_id)
             task.save()
+            task.toDoLists.add(ToDoList.objects.get(id=list_id))
             return redirect(f"http://localhost:8000/to-do-lists/{list_id}")
         else:
             return redirect("http://localhost:8000/create-tasks/")
     return render(request, 'create_task.html', context={'form': form})
+
+
+def handle_task(request, task_id):
+    if not request.user.is_authenticated:
+        return redirect("http://localhost:8000/admin")
+    else:
+        token = None
+        task = Task.objects.get(id=task_id)
+        if request.method == 'POST':
+            token = Token.objects.create(task=task)
+        return render(request, 'handle-task.html', context={'task': task, 'token': token})

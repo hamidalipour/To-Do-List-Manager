@@ -15,9 +15,9 @@ class Task(models.Model):
     done = models.BooleanField(default=False)
     due_date = models.DateField()
     is_priority = models.BooleanField(default=False)
-    toDoList = models.ManyToManyField(ToDoList)
+    toDoLists = models.ManyToManyField(ToDoList)
 
 
-class Link(models.Model):
+class Token(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
