@@ -1,4 +1,5 @@
 # authentication/views.py
+from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 
 from . import forms
@@ -43,7 +44,23 @@ def tasks_page(request, list_id):
         return redirect("http://localhost:8000/admin")
     else:
         tasks = Task.objects.filter(toDoLists__id=list_id).order_by('due_date', '-is_priority')
-        return render(request, 'tasks.html', context={'tasks': tasks, 'list_id': list_id})
+        form = forms.TokenForm()
+        message = ''
+        if request.method == 'POST':
+            form = forms.TokenForm(request.POST)
+            if form.is_valid():
+                uuid = form.cleaned_data['uuid']
+                try:
+                    token = Token.objects.get(uuid=uuid)
+                    to_do_list = ToDoList.objects.get(id=list_id)
+                    token.task.toDoLists.add(to_do_list)
+                except ValidationError:
+                    message = "invalid token format"
+                except Token.DoesNotExist:
+                    message = "token doesn't exist"
+
+        return render(
+            request, 'tasks.html', context={'tasks': tasks, 'list_id': list_id, 'form': form, 'message': message})
 
 
 def create_to_do_list(request):

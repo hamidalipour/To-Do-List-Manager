@@ -11,4 +11,10 @@
             </div>
         {% endfor %}
     <a href="{% url 'create-task' list_id%}">Create a new task</a>
+    <form method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <p>{{ message }}</p>
+        <button type="submit" >Create task with token</button>
+    </form>
 {% endblock %}
