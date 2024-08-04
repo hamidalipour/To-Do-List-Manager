@@ -2,7 +2,7 @@
     <h1>Your tasks</h1>
         {% for task in tasks %}
             <div style="margin-bottom: 78px; border: 1px solid #979797">
-                <a href="{% url 'handle-task' task.id%}">task id: {{ task.id }}</a>
+                <a href="{% url 'handle-task-v1' task.id%}">task id: {{ task.id }}</a>
                 <p>title: {{ task.title }}</p>
                 <p>description {{ task.description }}</p>
                 <p>task is done: {{ task.done }}</p>
@@ -10,7 +10,7 @@
                 <p>is priority: {{ task.is_priority }}</p>
             </div>
         {% endfor %}
-    <a href="{% url 'create-task' list_id%}">Create a new task</a>
+    <a href="{% url 'create-task-v1' list_id%}">Create a new task</a>
     <form method="post">
         {{ form.as_p }}
         {% csrf_token %}

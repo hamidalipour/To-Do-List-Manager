@@ -22,9 +22,15 @@ from personalToDoList import views as personalToDoListView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', personalToDoListView.login_page, name='login'),
-    path('to-do-lists', personalToDoListView.to_do_lists_page, name='to-do-lists-page'),
-    path('to-do-lists/<int:list_id>/', personalToDoListView.tasks_page, name='tasks-page'),
-    path('create-to-do-list/', personalToDoListView.create_to_do_list, name='create-to-do-list'),
-    path('create-tasks/<int:list_id>', personalToDoListView.create_task, name="create-task"),
-    path('handle-task/<int:task_id>', personalToDoListView.handle_task, name='handle-task'),
+    path('v1/to-do-lists', personalToDoListView.to_do_lists_page, name='to-do-lists-page-v1'),
+    path('v1/to-do-lists/<int:list_id>/', personalToDoListView.tasks_page, name='tasks-page-v1'),
+    path('v1/create-to-do-list/', personalToDoListView.create_to_do_list, name='create-to-do-list-v1'),
+    path('v1/create-tasks/<int:list_id>', personalToDoListView.create_task, name="create-task-v1"),
+    path('v1/handle-task/<int:task_id>', personalToDoListView.handle_task, name='handle-task-v1'),
+
+    path('v2/to-do-lists', personalToDoListView.ToDoListsPageView.as_view(), name='to-do-lists-page-v2'),
+    path('v2/to-do-lists/<int:list_id>/', personalToDoListView.TasksPageView.as_view(), name='tasks-page-v2'),
+    path('v2/create-to-do-list/', personalToDoListView.CreateToDoListView.as_view(), name='create-to-do-list-v2'),
+    path('v2/create-tasks/<int:list_id>', personalToDoListView.CreateTaskView.as_view(), name="create-task-v2"),
+    path('v2/handle-task/<int:task_id>', personalToDoListView.HandleTaskView.as_view(), name='handle-task-v2'),
 ]
