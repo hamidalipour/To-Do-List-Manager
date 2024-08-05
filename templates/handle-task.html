@@ -8,11 +8,11 @@
             <p>due date: {{ task.due_date }}</p>
             <p>is priority: {{ task.is_priority }}</p>
             {% if token != None %}
-                <p>token: {{ token.uuid }}</p>
+                <p>token: {{ token }}</p>
             {% endif %}
-            <form method="post">
+            <form method="post" action="{{ default_domain }}{{ version }}/create-uuid/{{ task.id }}">
                 {% csrf_token %}
-                <button type="submit" >Create token</button>
+                <button type="submit">Create token</button>
             </form>
             
         </div>

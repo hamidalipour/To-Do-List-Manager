@@ -1,12 +1,13 @@
 from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
+from django.urls import reverse
 
 from personalToDoList import forms
 from personalToDoList.models import ToDoList, Task, Token
 from django.views import View
 from django.conf import settings
 from django.views.generic.list import ListView
-from django.views.generic import CreateView, FormView
+from django.views.generic import CreateView, FormView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 DEFAULT_DOMAIN = settings.DEFAULT_DOMAIN
@@ -36,7 +37,7 @@ class TasksPageView(LoginRequiredMixin, ListView):
                                                                                               '-is_priority')
         context['default_domain'] = DEFAULT_DOMAIN
         context['version'] = "v3"
-        context['message'] = self.message
+        context['message'] = self.request.GET.get('message')
         context['form'] = forms.TokenForm
         self.list_id = self.kwargs['list_id']
         context['list_id'] = self.kwargs['list_id']
@@ -64,7 +65,7 @@ class CreateTaskWithUUIDView(LoginRequiredMixin, FormView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return f"{DEFAULT_DOMAIN}v3/to-do-lists/{self.kwargs['list_id']}/"
+        return f"{reverse('tasks-page-v3', kwargs={'list_id': self.kwargs['list_id']})}?message={self.message}"
 
 
 class CreateToDoListView(LoginRequiredMixin, CreateView):
@@ -100,3 +101,32 @@ class CreateTaskView(LoginRequiredMixin, CreateView):
         form.save()
         form.instance.toDoLists.add(ToDoList.objects.get(id=self.kwargs['list_id']))
         return super().form_valid(form)
+
+
+class HandleTaskView(TemplateView):
+    template_name = 'handle-task.html'
+    token = None
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        task = Task.objects.get(id=self.kwargs['task_id'])
+        context['task'] = task
+        self.token = self.request.GET.get('uuid')
+        context['token'] = self.token
+        context['version'] = "v3"
+        context['default_domain'] = DEFAULT_DOMAIN
+        return context
+
+
+class CreateUUIDView(LoginRequiredMixin, FormView):
+    form_class = forms.EmptyForm
+    template_name = 'handle-task.html'
+    token = None
+
+    def form_valid(self, form):
+        task = Task.objects.get(id=self.kwargs['task_id'])
+        self.token = Token.objects.create(task=task)
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return f"{reverse('handle-task-v3', kwargs={'task_id': self.kwargs['task_id']})}?uuid={self.token.uuid}"

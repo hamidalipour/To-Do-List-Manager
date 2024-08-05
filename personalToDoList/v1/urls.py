@@ -8,4 +8,5 @@ urlpatterns = [
     path('create-to-do-list/', personalToDoListView.create_to_do_list, name='create-to-do-list-v1'),
     path('create-task/<int:list_id>', personalToDoListView.create_task, name="create-task-v1"),
     path('handle-task/<int:task_id>', personalToDoListView.handle_task, name='handle-task-v1'),
+    path('create-uuid/<int:task_id>', personalToDoListView.handle_task, name='create-uuid-v1'),
 ]

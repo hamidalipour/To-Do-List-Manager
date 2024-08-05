@@ -22,3 +22,7 @@ class TaskForm(forms.ModelForm):
 
 class TokenForm(forms.Form):
     uuid = forms.CharField(label="enter uuid")
+
+
+class EmptyForm(forms.Form):
+    pass

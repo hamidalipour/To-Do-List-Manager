@@ -108,4 +108,6 @@ def handle_task(request, task_id):
         task = Task.objects.get(id=task_id)
         if request.method == 'POST':
             token = Token.objects.create(task=task)
-        return render(request, 'handle-task.html', context={'task': task, 'token': token})
+            token = token.uuid
+        return render(request, 'handle-task.html',
+                      context={'task': task, 'token': token, 'version': "v1", 'default_domain': DEFAULT_DOMAIN})

@@ -107,11 +107,12 @@ class HandleTaskView(BaseView):
             return redirect(f"{DEFAULT_DOMAIN}admin")
         token = None
         task = Task.objects.get(id=task_id)
-        return render(request, 'handle-task.html', context={'task': task, 'token': token})
+        return render(request, 'handle-task.html',
+                      context={'task': task, 'token': token, 'version': "v2", 'default_domain': DEFAULT_DOMAIN})
 
     def post(self, request, task_id):
         if not self.check_authentication(request):
             return redirect(f"{DEFAULT_DOMAIN}admin")
         task = Task.objects.get(id=task_id)
         token = Token.objects.create(task=task)
-        return render(request, 'handle-task.html', context={'task': task, 'token': token})
+        return render(request, 'handle-task.html', context={'task': task, 'token': token.uuid, 'version': "v2", 'default_domain': DEFAULT_DOMAIN})
