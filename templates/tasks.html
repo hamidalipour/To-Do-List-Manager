@@ -11,7 +11,7 @@
             </div>
         {% endfor %}
     <a href="{{ default_domain }}{{ version }}/create-task/{{ list_id }}">Create a new task</a>
-    <form method="post">
+    <form method="post" action="{{ default_domain }}{{ version }}/create-task-with-uuid/{{ list_id }}">
         {{ form.as_p }}
         {% csrf_token %}
         <p>{{ message }}</p>
