@@ -15,22 +15,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-
-from personalToDoList import views as personalToDoListView
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', personalToDoListView.login_page, name='login'),
-    path('v1/to-do-lists', personalToDoListView.to_do_lists_page, name='to-do-lists-page-v1'),
-    path('v1/to-do-lists/<int:list_id>/', personalToDoListView.tasks_page, name='tasks-page-v1'),
-    path('v1/create-to-do-list/', personalToDoListView.create_to_do_list, name='create-to-do-list-v1'),
-    path('v1/create-tasks/<int:list_id>', personalToDoListView.create_task, name="create-task-v1"),
-    path('v1/handle-task/<int:task_id>', personalToDoListView.handle_task, name='handle-task-v1'),
-
-    path('v2/to-do-lists', personalToDoListView.ToDoListsPageView.as_view(), name='to-do-lists-page-v2'),
-    path('v2/to-do-lists/<int:list_id>/', personalToDoListView.TasksPageView.as_view(), name='tasks-page-v2'),
-    path('v2/create-to-do-list/', personalToDoListView.CreateToDoListView.as_view(), name='create-to-do-list-v2'),
-    path('v2/create-tasks/<int:list_id>', personalToDoListView.CreateTaskView.as_view(), name="create-task-v2"),
-    path('v2/handle-task/<int:task_id>', personalToDoListView.HandleTaskView.as_view(), name='handle-task-v2'),
+    path('', include('personalToDoList.urls')),
 ]

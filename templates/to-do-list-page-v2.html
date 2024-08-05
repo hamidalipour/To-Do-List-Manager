@@ -1,9 +1,0 @@
-{% block content %}
-    <h1>Your toDo lists</h1>
-    <ul>
-        {% for to_do_list in to_do_lists %}
-            <li><a href="{% url 'tasks-page-v2' to_do_list.id %}">{{ to_do_list.title }}</a></li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'create-to-do-list-v2'%}">Create a new toDo list</a>
-{% endblock %}
