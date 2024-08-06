@@ -33,44 +33,36 @@ DEFAULT_DOMAIN = settings.DEFAULT_DOMAIN
 
 def to_do_lists_page(request):
     user = request.user
-    if not user.is_authenticated:
-        return redirect(f"{DEFAULT_DOMAIN}admin")
-    else:
-        version = "v1"
-        to_do_lists = ToDoList.objects.filter(user=user)
-        return render(request, 'to-do-list-page.html',
-                      context={'to_do_lists': to_do_lists, 'version': version, 'default_domain': DEFAULT_DOMAIN})
+    version = "v1"
+    to_do_lists = ToDoList.objects.filter(user=user)
+    return render(request, 'to-do-list-page.html',
+                  context={'to_do_lists': to_do_lists, 'version': version, 'default_domain': DEFAULT_DOMAIN})
 
 
 def tasks_page(request, list_id):
-    if not request.user.is_authenticated:
-        return redirect(f"{DEFAULT_DOMAIN}admin")
-    else:
-        version = "v1"
-        tasks = Task.objects.filter(toDoLists__id=list_id).order_by('due_date', '-is_priority')
-        form = forms.TokenForm()
-        message = ''
-        if request.method == 'POST':
-            form = forms.TokenForm(request.POST)
-            if form.is_valid():
-                uuid = form.cleaned_data['uuid']
-                try:
-                    token = Token.objects.get(uuid=uuid)
-                    to_do_list = ToDoList.objects.get(id=list_id)
-                    token.task.toDoLists.add(to_do_list)
-                    message = "task has been added"
-                except ValidationError:
-                    message = "invalid token format"
-                except Token.DoesNotExist:
-                    message = "token doesn't exist"
+    version = "v1"
+    tasks = Task.objects.filter(toDoLists__id=list_id).order_by('due_date', '-is_priority')
+    form = forms.TokenForm()
+    message = ''
+    if request.method == 'POST':
+        form = forms.TokenForm(request.POST)
+        if form.is_valid():
+            uuid = form.cleaned_data['uuid']
+            try:
+                token = Token.objects.get(uuid=uuid)
+                to_do_list = ToDoList.objects.get(id=list_id)
+                token.task.toDoLists.add(to_do_list)
+                message = "task has been added"
+            except ValidationError:
+                message = "invalid token format"
+            except Token.DoesNotExist:
+                message = "token doesn't exist"
 
-        return render(request, 'tasks.html',
-                      context={'tasks': tasks, 'list_id': list_id, 'form': form, 'message': message, 'version': version, 'default_domain': DEFAULT_DOMAIN})
+    return render(request, 'tasks.html',
+                  context={'tasks': tasks, 'list_id': list_id, 'form': form, 'message': message, 'version': version, 'default_domain': DEFAULT_DOMAIN})
 
 
 def create_to_do_list(request):
-    if not request.user.is_authenticated:
-        return redirect(f"{DEFAULT_DOMAIN}admin")
     form = forms.ToDoListForm()
     if request.method == 'POST':
         form = forms.ToDoListForm(request.POST)
@@ -85,8 +77,6 @@ def create_to_do_list(request):
 
 
 def create_task(request, list_id):
-    if not request.user.is_authenticated:
-        return redirect(f"{DEFAULT_DOMAIN}admin")
     form = forms.TaskForm()
     if request.method == 'POST':
         form = forms.TaskForm(request.POST)
@@ -101,13 +91,10 @@ def create_task(request, list_id):
 
 
 def handle_task(request, task_id):
-    if not request.user.is_authenticated:
-        return redirect(f"{DEFAULT_DOMAIN}admin")
-    else:
-        token = None
-        task = Task.objects.get(id=task_id)
-        if request.method == 'POST':
-            token = Token.objects.create(task=task)
-            token = token.uuid
-        return render(request, 'handle-task.html',
-                      context={'task': task, 'token': token, 'version': "v1", 'default_domain': DEFAULT_DOMAIN})
+    token = None
+    task = Task.objects.get(id=task_id)
+    if request.method == 'POST':
+        token = Token.objects.create(task=task)
+        token = token.uuid
+    return render(request, 'handle-task.html',
+                  context={'task': task, 'token': token, 'version': "v1", 'default_domain': DEFAULT_DOMAIN})
