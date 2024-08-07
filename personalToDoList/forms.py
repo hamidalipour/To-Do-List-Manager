@@ -1,4 +1,6 @@
 from django import forms
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 from personalToDoList.models import ToDoList, Task, Token
 
@@ -26,3 +28,9 @@ class TokenForm(forms.Form):
 
 class EmptyForm(forms.Form):
     pass
+
+
+class SignUpForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ('username', 'password')

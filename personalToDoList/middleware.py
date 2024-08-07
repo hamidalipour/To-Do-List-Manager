@@ -10,10 +10,10 @@ def login_middleware(get_response):
         if request.user.is_authenticated:
             response = get_response(request)
             return response
-        if request.path.startswith("/admin"):
+        if request.path.startswith("/admin") or request.path.startswith("/login"):
             response = get_response(request)
             return response
 
-        return redirect(f"{DEFAULT_DOMAIN}admin")
+        return redirect(f"{DEFAULT_DOMAIN}login")
 
     return middleware

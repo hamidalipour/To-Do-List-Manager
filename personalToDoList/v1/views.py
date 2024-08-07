@@ -8,29 +8,6 @@ from django.conf import settings
 DEFAULT_DOMAIN = settings.DEFAULT_DOMAIN
 
 
-# def check_user_authentication(user):
-#     pass
-
-
-# def login_page(request):
-#     form = forms.LoginForm()
-#     message = ''
-#     if request.method == 'POST':
-#         form = forms.LoginForm(request.POST)
-#         if form.is_valid():
-#             user = authenticate(
-#                 username=form.cleaned_data['username'],
-#                 password=form.cleaned_data['password'],
-#             )
-#             if user is not None:
-#                 login(request, user)
-#                 message = f'Hello {user.username}! You have been logged in'
-#             else:
-#                 message = 'Login failed!'
-#     return render(
-#         request, 'login.html', context={'form': form, 'message': message})
-
-
 def to_do_lists_page(request):
     user = request.user
     version = "v1"

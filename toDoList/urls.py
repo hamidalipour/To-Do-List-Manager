@@ -16,8 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from personalToDoList import views as personalToDoListView
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
+    path('login/', personalToDoListView.login_page, name='login'),
+    path('logout/', personalToDoListView.logout_page, name='logout'),
+    path('home-page', personalToDoListView.home_page, name='home-page'),
     path('', include('personalToDoList.urls')),
 ]
