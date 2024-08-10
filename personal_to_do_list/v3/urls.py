@@ -9,6 +9,7 @@ urlpatterns = [
     path('create-task/<int:list_id>', personal_to_do_list_view.CreateTaskView.as_view(), name="create-task-v3"),
     path('handle-task/<int:task_id>/<int:list_id>', personal_to_do_list_view.HandleTaskView.as_view(), name='handle'
                                                                                                             '-task-v3'),
-    path('create-uuid/<int:task_id>/<int:list_id>', personal_to_do_list_view.CreateUUIDOrDeleteView.as_view(), name='create-uuid-v3'),
-    path('delete-task/<int:task_id>/<int:list_id>', personal_to_do_list_view.CreateUUIDOrDeleteView.as_view(), name='delete-task-v3'),
+    path('create-uuid/<int:task_id>/<int:list_id>', personal_to_do_list_view.CreateUUIDView.as_view(), name='create'
+                                                                                                            '-uuid-v3'),
+    path('delete-task/<int:task_id>/<int:list_id>', personal_to_do_list_view.DeleteView.as_view(), name='delete-task-v3'),
 ]

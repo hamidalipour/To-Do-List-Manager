@@ -9,5 +9,5 @@ urlpatterns = [
     path('create-task/<int:list_id>', personal_to_do_list_view.create_task, name="create-task-v1"),
     path('handle-task/<int:task_id>/<int:list_id>', personal_to_do_list_view.handle_task, name='handle-task-v1'),
     path('create-uuid/<int:task_id>/<int:list_id>', personal_to_do_list_view.handle_task, name='create-uuid-v1'),
-    path('delete-task/<int:task_id>/<int:list_id>', personal_to_do_list_view.handle_task, name='delete-task-v1'),
+    path('delete-task/<int:task_id>/<int:list_id>', personal_to_do_list_view.delete_task, name='delete-task-v1'),
 ]

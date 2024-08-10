@@ -12,6 +12,6 @@ urlpatterns = [
                                                                                                             '-task-v2'),
     path('create-uuid/<int:task_id>/<int:list_id>', personal_to_do_list_view.HandleTaskView.as_view(), name='create'
                                                                                                             '-uuid-v2'),
-    path('delete-task/<int:task_id>/<int:list_id>', personal_to_do_list_view.HandleTaskView.as_view(), name='delete'
+    path('delete-task/<int:task_id>/<int:list_id>', personal_to_do_list_view.DeleteTaskView.as_view(), name='delete'
                                                                                                             '-task-v2')
 ]
