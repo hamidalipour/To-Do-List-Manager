@@ -2,7 +2,7 @@
     <h1>Your tasks</h1>
         {% for task in tasks %}
             <div style="margin-bottom: 78px; border: 1px solid #979797">
-                <a href="{{ default_domain }}{{ version }}/handle-task/{{ task.id }}">task id: {{ task.id }}</a>
+                <a href="{{ default_domain }}{{ version }}/handle-task/{{ task.id }}/{{ list_id }}">task id: {{ task.id }}</a>
                 <p>title: {{ task.title }}</p>
                 <p>description {{ task.description }}</p>
                 <p>task is done: {{ task.done }}</p>
