@@ -6,6 +6,7 @@ urlpatterns = [
     path('to-do-lists/<int:list_id>/', personal_to_do_list_view.TasksPageView.as_view(), name='tasks-page-v2'),
     path('create-task-with-uuid/<int:list_id>', personal_to_do_list_view.TasksPageView.as_view(), name='create-task'
                                                                                                        '-with-uuid-v2'),
+    path('delete-to-do-list/<int:list_id>', personal_to_do_list_view.DeleteToDoListView.as_view(), name='delete-to-do-list-v2'),
     path('create-to-do-list/', personal_to_do_list_view.CreateToDoListView.as_view(), name='create-to-do-list-v2'),
     path('create-task/<int:list_id>', personal_to_do_list_view.CreateTaskView.as_view(), name="create-task-v2"),
     path('handle-task/<int:task_id>/<int:list_id>', personal_to_do_list_view.HandleTaskView.as_view(), name='handle'

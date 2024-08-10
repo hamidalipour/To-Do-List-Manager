@@ -15,6 +15,11 @@
         {{ form.as_p }}
         {% csrf_token %}
         <p>{{ message }}</p>
-        <button type="submit" >Create task with token</button>
+        <button type="submit" name="create_task_with_uuid">Create task with token</button>
+    </form>
+
+    <form method="post" action="{{ default_domain }}{{ version }}/delete-to-do-list/{{ list_id }}">
+        {% csrf_token %}
+        <button type="submit" name="delete_to_do_list">Delete to do list</button>
     </form>
 {% endblock %}
