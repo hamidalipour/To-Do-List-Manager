@@ -2,6 +2,7 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, password):
         user = self.model(username=username)
@@ -20,7 +21,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=50, unique=True)
     USERNAME_FIELD = "username"
     objects = CustomUserManager()
-
 
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"

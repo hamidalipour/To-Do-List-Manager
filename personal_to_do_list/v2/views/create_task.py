@@ -11,7 +11,7 @@ DEFAULT_DOMAIN = settings.DEFAULT_DOMAIN
 class CreateTaskView(View):
     def get(self, request, list_id):
         form = forms.TaskForm()
-        return render(request, 'create-task.html', context={'form': form})
+        return render(request, "create-task.html", context={"form": form})
 
     def post(self, request, list_id):
         form = forms.TaskForm(request.POST)

@@ -4,15 +4,14 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('personal_to_do_list', '0002_remove_task_todolist_link_task_todolist'),
+        ("personal_to_do_list", "0002_remove_task_todolist_link_task_todolist"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='task',
-            old_name='_base',
-            new_name='toDoLists',
+            model_name="task",
+            old_name="_base",
+            new_name="toDoLists",
         ),
     ]

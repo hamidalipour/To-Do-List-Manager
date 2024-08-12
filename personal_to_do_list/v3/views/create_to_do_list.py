@@ -10,13 +10,13 @@ DEFAULT_DOMAIN = settings.DEFAULT_DOMAIN
 
 class CreateToDoListView(LoginRequiredMixin, CreateView):
     model = ToDoList
-    template_name = 'create-to-do-list.html'
+    template_name = "create-to-do-list.html"
     form_class = forms.ToDoListForm
     success_url = f"{DEFAULT_DOMAIN}v3/to-do-lists"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = self.form_class()
+        context["form"] = self.form_class()
         return context
 
     def form_valid(self, form):

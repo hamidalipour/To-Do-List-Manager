@@ -4,14 +4,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('personal_to_do_list', '0003_rename_todolist_task_todolists'),
+        ("personal_to_do_list", "0003_rename_todolist_task_todolists"),
     ]
 
     operations = [
         migrations.RenameModel(
-            old_name='Link',
-            new_name='Token',
+            old_name="Link",
+            new_name="Token",
         ),
     ]

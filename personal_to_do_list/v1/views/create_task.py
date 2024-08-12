@@ -9,7 +9,7 @@ DEFAULT_DOMAIN = settings.DEFAULT_DOMAIN
 
 def create_task(request, list_id):
     form = forms.TaskForm()
-    if request.method == 'POST':
+    if request.method == "POST":
         form = forms.TaskForm(request.POST)
         if form.is_valid():
             task = form.save(commit=False)
@@ -18,4 +18,4 @@ def create_task(request, list_id):
             return redirect(f"{DEFAULT_DOMAIN}v1/to-do-lists/{list_id}")
         else:
             return redirect(f"{DEFAULT_DOMAIN}v1/create-tasks/")
-    return render(request, 'create-task.html', context={'form': form})
+    return render(request, "create-task.html", context={"form": form})

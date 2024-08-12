@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("personal_to_do_list", "0005_alter_token_uuid"),
     ]

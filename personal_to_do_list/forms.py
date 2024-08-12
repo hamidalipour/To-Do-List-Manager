@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
-from personal_to_do_list.models import ToDoList, Task, Token
+from personal_to_do_list.models import ToDoList, Task
 
 
 class LoginForm(forms.Form):
@@ -13,13 +13,13 @@ class LoginForm(forms.Form):
 class ToDoListForm(forms.ModelForm):
     class Meta:
         model = ToDoList
-        fields = ('title',)
+        fields = ("title",)
 
 
 class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ('title', 'description', 'done', 'due_date', 'is_priority')
+        fields = ("title", "description", "done", "due_date", "is_priority")
 
 
 class TokenForm(forms.Form):
@@ -33,4 +33,4 @@ class EmptyForm(forms.Form):
 class SignUpForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('username', 'password')
+        fields = ("username", "password")

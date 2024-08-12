@@ -10,7 +10,7 @@ DEFAULT_DOMAIN = settings.DEFAULT_DOMAIN
 class CreateToDoListView(View):
     def get(self, request):
         form = forms.ToDoListForm()
-        return render(request, 'create-to-do-list.html', context={'form': form})
+        return render(request, "create-to-do-list.html", context={"form": form})
 
     def post(self, request):
         form = forms.ToDoListForm(request.POST)

@@ -5,15 +5,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('personal_to_do_list', '0004_rename_link_token'),
+        ("personal_to_do_list", "0004_rename_link_token"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='token',
-            name='uuid',
+            model_name="token",
+            name="uuid",
             field=models.UUIDField(default=uuid.uuid4, unique=True),
         ),
     ]

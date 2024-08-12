@@ -6,27 +6,43 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('personal_to_do_list', '0001_initial'),
+        ("personal_to_do_list", "0001_initial"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='task',
-            name='_base',
+            model_name="task",
+            name="_base",
         ),
         migrations.CreateModel(
-            name='Link',
+            name="Link",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('uuid', models.UUIDField(default=uuid.uuid4, editable=False, unique=True)),
-                ('task', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='personal_to_do_list.task')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "uuid",
+                    models.UUIDField(default=uuid.uuid4, editable=False, unique=True),
+                ),
+                (
+                    "task",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="personal_to_do_list.task",
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='task',
-            name='_base',
-            field=models.ManyToManyField(to='personal_to_do_list.todolist'),
+            model_name="task",
+            name="_base",
+            field=models.ManyToManyField(to="personal_to_do_list.todolist"),
         ),
     ]
