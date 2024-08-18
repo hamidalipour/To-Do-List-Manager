@@ -1,3 +1,4 @@
+{% extends 'base.html' %}
 {% block content %}
     <h1>Your task</h1>
         <div style="margin-bottom: 78px; border: 1px solid #979797">
@@ -6,19 +7,28 @@
             <p>description {{ task.description }}</p>
             <p>task is done: {{ task.done }}</p>
             <p>due date: {{ task.due_date }}</p>
-            <p>is priority: {{ task.is_priority }}</p>
+            <p>priority: {{ task.priority }}</p>
+            <p>file:
+                <a href="{{ task.file.url }}" class="btn btn-primary btn-sm" target="_blank">
+                    {{ task.file }}
+                </a>
+            </p>
             {% if token != None %}
                 <p>token: {{ token }}</p>
             {% endif %}
-            <form method="post" action="{{ default_domain }}{{ version }}/create-uuid/{{ task.id }}/{{ list_id }}">
+            <form method="post" action="{{ create_url }}">
                 {% csrf_token %}
                 <button type="submit" name="create_token">Create token</button>
             </form>
 
-            <form method="post" action="{{ default_domain }}{{ version }}/delete-task/{{ task.id }}/{{ list_id }}">
+            <form method="post" action="{{ delete_url }}">
                 {% csrf_token %}
                 <button type="submit" name="delete_task">Delete task</button>
             </form>
-            
+            <form method="get" action="{{ edit_url }}">
+                {% csrf_token %}
+                <button type="submit" name="edit_task">Edit task</button>
+            </form>
+
         </div>
 {% endblock %}

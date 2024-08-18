@@ -1,9 +1,19 @@
-<html>
-<head>
-    <title>Home</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Home</h1>
     <h2>Welcome, {{ user.username }}</h2>
+    <p>choose your version</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="v1">v1</button>
+    </form>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="v2">v2</button>
+    </form>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="v3">v3</button>
+    </form>
     <a href="{% url 'logout' %}">Logout</a>
-</body>
-</html>
+{% endblock content %}

@@ -1,10 +1,13 @@
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
+from django.urls import reverse
 
-from personal_to_do_list import forms
+from tasks_management import forms
 
 
 def login_page(request):
+    if request.user.is_authenticated:
+        return redirect(reverse("home-page"))
     form = forms.LoginForm()
     message = ""
     if request.method == "POST":
@@ -17,6 +20,7 @@ def login_page(request):
             if user is not None:
                 login(request, user)
                 message = f"Hello {user.username}! You have been logged in"
+                return redirect(reverse("home-page"))
             else:
                 message = "Incorrect username or password"
     return render(request, "login.html", context={"form": form, "message": message})
@@ -29,4 +33,15 @@ def logout_page(request):
 
 def home_page(request):
     user = request.user
+    if request.method == "POST":
+        if "v1" in request.POST:
+            return redirect(reverse("to-do-lists-page-v1"))
+        elif "v2" in request.POST:
+            return redirect(reverse("to-do-lists-page-v2"))
+        elif "v3" in request.POST:
+            return redirect(reverse("to-do-lists-page-v3"))
     return render(request, "home-page.html", context={"user": user})
+
+
+def default(request):
+    return redirect(reverse("home-page"))

@@ -1,24 +1,30 @@
+{% extends 'base.html' %}
 {% block content %}
     <h1>Your tasks</h1>
         {% for task in tasks %}
             <div style="margin-bottom: 78px; border: 1px solid #979797">
-                <a href="{{ default_domain }}{{ version }}/handle-task/{{ task.id }}/{{ list_id }}">task id: {{ task.id }}</a>
+                <a href="{{ default_url }}/handle-task/{{ task.id }}/{{ list_id }}">task id: {{ task.id }}</a>
                 <p>title: {{ task.title }}</p>
                 <p>description {{ task.description }}</p>
                 <p>task is done: {{ task.done }}</p>
                 <p>due date: {{ task.due_date }}</p>
-                <p>is priority: {{ task.is_priority }}</p>
+                <p>priority: {{ task.priority }}</p>
+                <p>file:
+                <a href="{{ task.file.url }}" class="btn btn-primary btn-sm" target="_blank">
+                    {{ task.file }}
+                </a>
+                </p>
             </div>
         {% endfor %}
-    <a href="{{ default_domain }}{{ version }}/create-task/{{ list_id }}">Create a new task</a>
-    <form method="post" action="{{ default_domain }}{{ version }}/create-task-with-uuid/{{ list_id }}">
+    <a href="{{ create_task_url }}">Create a new task</a>
+    <form method="post" action="{{ create_with_uuid_url }}">
         {{ form.as_p }}
         {% csrf_token %}
         <p>{{ message }}</p>
         <button type="submit" name="create_task_with_uuid">Create task with token</button>
     </form>
 
-    <form method="post" action="{{ default_domain }}{{ version }}/delete-to-do-list/{{ list_id }}">
+    <form method="post" action="{{ delete_to_do_list_url }}">
         {% csrf_token %}
         <button type="submit" name="delete_to_do_list">Delete to do list</button>
     </form>
