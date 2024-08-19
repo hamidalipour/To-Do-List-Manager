@@ -39,11 +39,11 @@ urlpatterns = [
         views.TokenView.as_view({'post': 'create'}),
         name="create-uuid-v5",
     ),
-    # path(
-    #     "create-task-with-uuid/<int:list_id>",
-    #     views.CreateTaskWithUuidView.as_view(),
-    #     name="create-task-with-uuid-v5",
-    # ),
+    path(
+        "create-task-with-uuid/<int:list_id>",
+        views.TaskWithUuid.as_view({'post': 'create'}),
+        name="create-task-with-uuid-v5",
+    ),
 
 
 ]

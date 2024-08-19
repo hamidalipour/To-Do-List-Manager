@@ -39,12 +39,17 @@ class TaskSerializer(serializers.ModelSerializer):
         return instance
 
 
-class TokenSerializer(serializers.Serializer):
-    uuid = serializers.UUIDField()
+class TokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Token
+        fields = ["uuid"]
 
 
-class NewTokenSerializer(serializers.Serializer):
-    uuid = serializers.UUIDField(read_only=True)
+class NewTokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Token
+        fields = ["uuid"]
+        read_only_fields = ["uuid"]
 
     def create(self, validated_data):
         return Token.objects.create(**validated_data)
