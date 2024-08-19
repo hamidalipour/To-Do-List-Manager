@@ -6,3 +6,4 @@ from .delete_to_do_list import DeleteToDoListView
 from .create_task_with_uuid import CreateTaskWithUuidView
 from .delete_task import DeleteTaskView
 from .create_uuid import CreateUuidView
+from .edit_task import EditTaskView

@@ -39,4 +39,9 @@ urlpatterns = [
         views.CreateUuidView.as_view(),
         name="create-uuid-v4",
     ),
+    path(
+        "edit-task/<int:task_id>",
+        views.EditTaskView.as_view(),
+        name="edit-task-v4",
+    ),
 ]

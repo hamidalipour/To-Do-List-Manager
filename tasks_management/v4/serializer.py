@@ -29,6 +29,16 @@ class TaskSerializer(serializers.Serializer):
     def create(self, validated_data):
         return Task.objects.create(**validated_data)
 
+    def update(self, instance, validated_data):
+        instance.title = validated_data.get('title', instance.title)
+        instance.description = validated_data.get('description', instance.description)
+        instance.done = validated_data.get('done', instance.done)
+        instance.due_date = validated_data.get('due_date', instance.due_date)
+        instance.priority = validated_data.get('priority', instance.priority)
+        instance.file = validated_data.get('file', instance.file)
+        instance.save()
+        return instance
+
 
 class TokenSerializer(serializers.Serializer):
     uuid = serializers.UUIDField()
