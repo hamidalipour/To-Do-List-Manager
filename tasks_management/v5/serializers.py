@@ -19,14 +19,11 @@ class ToDoListSerializer(serializers.ModelSerializer):
         return ToDoList.objects.create(**validated_data)
 
 
-class TaskSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    title = serializers.CharField()
-    description = serializers.CharField()
-    done = serializers.BooleanField()
-    due_date = serializers.DateField()
-    priority = serializers.ChoiceField(choices=PRIORITY)
-    file = serializers.FileField()
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ["id", "title", "description", "done", "due_date", "priority", "file"]
+        read_only_fields = ['id']
 
     def create(self, validated_data):
         return Task.objects.create(**validated_data)

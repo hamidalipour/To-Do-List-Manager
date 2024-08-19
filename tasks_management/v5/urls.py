@@ -18,31 +18,32 @@ urlpatterns = [
         views.ToDoListsView.as_view({'delete': 'destroy'}),
         name="delete-to-do-list-v5",
     ),
-    # path(
-    #     "to-do-lists/<int:list_id>",
-    #     views.TasksView.as_view(),
-    #     name="tasks-page-v4",
-    # ),
-    # path("create-task/<int:list_id>", views.CreateTask.as_view(), name="create-task-v4"),
-
+    path(
+        "to-do-lists/<int:list_id>",
+        views.TasksView.as_view({'get': 'list'}),
+        name="tasks-page-v5",
+    ),
+    path("create-task/<int:list_id>", views.TasksView.as_view({'post': 'create'}), name="create-task-v5"),
+    path(
+        "delete-task/<int:task_id>/<int:list_id>",
+        views.TasksView.as_view({'delete': 'destroy'}),
+        name="delete-task-v5",
+    ),
+    path(
+        "edit-task/<int:task_id>",
+        views.TasksView.as_view({'put': 'update'}),
+        name="edit-task-v5",
+    ),
+    path(
+        "create-uuid/<int:task_id>",
+        views.TokenView.as_view({'post': 'create'}),
+        name="create-uuid-v5",
+    ),
     # path(
     #     "create-task-with-uuid/<int:list_id>",
     #     views.CreateTaskWithUuidView.as_view(),
-    #     name="create-task-with-uuid-v4",
+    #     name="create-task-with-uuid-v5",
     # ),
-    # path(
-    #     "delete-task/<int:task_id>/<int:list_id>",
-    #     views.DeleteTaskView.as_view(),
-    #     name="delete-task-v4",
-    # ),
-    # path(
-    #     "create-uuid/<int:task_id>",
-    #     views.CreateUuidView.as_view(),
-    #     name="create-uuid-v4",
-    # ),
-    # path(
-    #     "edit-task/<int:task_id>",
-    #     views.EditTaskView.as_view(),
-    #     name="edit-task-v4",
-    # ),
+
+
 ]
