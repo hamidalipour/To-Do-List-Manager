@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 
 from tasks_management.models import ToDoList
-from tasks_management.v4.serializer import ToDoListSerializer
+from tasks_management.v4.serializers import ToDoListSerializer
 from django.core.exceptions import ObjectDoesNotExist
 
 

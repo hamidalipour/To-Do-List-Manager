@@ -1,7 +1,7 @@
 from rest_framework import generics
 
 from tasks_management.models import Token, Task
-from tasks_management.v4.serializer import NewTokenSerializer
+from tasks_management.v4.serializers import NewTokenSerializer
 
 
 class CreateUuidView(generics.CreateAPIView):

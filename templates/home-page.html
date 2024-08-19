@@ -19,5 +19,9 @@
         {% csrf_token %}
         <button type="submit" name="v4">version 4</button>
     </form>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="v5">version 5</button>
+    </form>
     <a href="{% url 'logout' %}">Logout</a>
 {% endblock content %}

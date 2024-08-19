@@ -2,7 +2,7 @@
 from rest_framework import generics
 
 from tasks_management.models import ToDoList
-from tasks_management.v4.serializer import ToDoListSerializer
+from tasks_management.v4.serializers import ToDoListSerializer
 
 
 class CreateToDoListView(generics.CreateAPIView):

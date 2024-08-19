@@ -1,7 +1,7 @@
 from rest_framework import generics
 
 from tasks_management.models import ToDoList, Task
-from tasks_management.v4.serializer import ToDoListSerializer, TaskSerializer
+from tasks_management.v4.serializers import ToDoListSerializer, TaskSerializer
 
 
 class CreateTask(generics.CreateAPIView):

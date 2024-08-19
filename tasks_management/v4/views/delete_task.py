@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 
 from tasks_management.models import Task, ToDoList
-from tasks_management.v4.serializer import TaskSerializer
+from tasks_management.v4.serializers import TaskSerializer
 
 
 class DeleteTaskView(generics.DestroyAPIView):

@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from rest_framework import generics
 
 from tasks_management.models import Task, Token, ToDoList
-from tasks_management.v4.serializer import TokenSerializer
+from tasks_management.v4.serializers import TokenSerializer
 from rest_framework.response import Response
 
 

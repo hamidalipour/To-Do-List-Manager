@@ -2,7 +2,7 @@ from django.db.models import Case, When, Value
 from rest_framework import generics
 
 from tasks_management.models import Task
-from tasks_management.v4.serializer import TaskSerializer
+from tasks_management.v4.serializers import TaskSerializer
 
 
 class TasksView(generics.ListAPIView):
