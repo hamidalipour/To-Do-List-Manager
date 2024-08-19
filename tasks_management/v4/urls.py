@@ -12,7 +12,7 @@ router = routers.DefaultRouter()
 urlpatterns = [
     path('', include(router.urls)),
     path('to-do-lists', views.ToDoListsView.as_view(), name='to-do-lists-page-v4'),
-    path('create-to-do-list', views.CreateToDoList.as_view(), name='create-to-do-list-v4'),
+    path('create-to-do-list', views.CreateToDoListView.as_view(), name='create-to-do-list-v4'),
     path(
         "to-do-lists/<int:list_id>",
         views.TasksView.as_view(),
@@ -31,7 +31,12 @@ urlpatterns = [
     ),
     path(
         "delete-task/<int:task_id>/<int:list_id>",
-        views.DeleteTask.as_view(),
+        views.DeleteTaskView.as_view(),
         name="delete-task-v4",
+    ),
+    path(
+        "create-uuid/<int:task_id>",
+        views.CreateUuidView.as_view(),
+        name="create-uuid-v4",
     ),
 ]

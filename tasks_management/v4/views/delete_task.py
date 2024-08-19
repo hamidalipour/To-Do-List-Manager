@@ -5,7 +5,7 @@ from tasks_management.models import Task, ToDoList
 from tasks_management.v4.serializer import TaskSerializer
 
 
-class DeleteTask(generics.DestroyAPIView):
+class DeleteTaskView(generics.DestroyAPIView):
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
 
