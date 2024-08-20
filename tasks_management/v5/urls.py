@@ -7,8 +7,6 @@ router = routers.DefaultRouter()
 # router.register(r'to-do-lists', views.ToDoListsView, basename='to-do-lists-page-v5')
 # router.register(r'create-to-do-list', views.CreateToDoListView, basename='create-to-do-list-v5')
 
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('', include(router.urls)),
     path('to-do-lists', views.ToDoListsView.as_view({'get': 'list'}), name='to-do-lists-page-v5'),

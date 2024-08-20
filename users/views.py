@@ -44,6 +44,8 @@ def home_page(request):
             return redirect(reverse("to-do-lists-page-v4"))
         elif "v5" in request.POST:
             return redirect(reverse("to-do-lists-page-v5"))
+        elif "v6" in request.POST:
+            return redirect(reverse("to-do-lists-v6-list"))
     return render(request, "home-page.html", context={"user": user})
 
 

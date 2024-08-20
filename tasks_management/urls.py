@@ -6,4 +6,5 @@ urlpatterns = [
     path("v3/", include("tasks_management.v3.urls")),
     path("v4/", include("tasks_management.v4.urls")),
     path("v5/", include("tasks_management.v5.urls")),
+    path("v6/", include("tasks_management.v6.urls")),
 ]
