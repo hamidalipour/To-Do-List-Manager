@@ -10,9 +10,7 @@ class TokenView(viewsets.ViewSet):
     def create(self, request, task_id):
         queryset = Token.objects.all()
         serializer = NewTokenSerializer(data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             task = Task.objects.get(id=task_id)
             serializer.save(task=task)
             return Response(serializer.data)
-        else:
-            return Response(serializer.error_messages)

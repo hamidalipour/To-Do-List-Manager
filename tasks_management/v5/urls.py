@@ -31,7 +31,7 @@ urlpatterns = [
     ),
     path(
         "edit-task/<int:task_id>",
-        views.TasksView.as_view({'put': 'update'}),
+        views.TasksView.as_view({'post': 'update'}),
         name="edit-task-v5",
     ),
     path(

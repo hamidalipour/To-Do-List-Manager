@@ -24,12 +24,10 @@ class TasksView(viewsets.ViewSet):
     def create(self, request, list_id):
         queryset = Task.objects.all()
         serializer = TaskSerializer(data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             task = serializer.save()
             task.to_do_lists.add(ToDoList.objects.get(id=list_id))
             return Response(serializer.data)
-        else:
-            return Response(serializer.error_messages)
 
     def destroy(self, request, task_id, list_id):
         try:

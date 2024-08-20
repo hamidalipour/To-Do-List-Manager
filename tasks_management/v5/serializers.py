@@ -39,10 +39,8 @@ class TaskSerializer(serializers.ModelSerializer):
         return instance
 
 
-class TokenSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Token
-        fields = ["uuid"]
+class TokenSerializer(serializers.Serializer):
+    uuid = serializers.UUIDField()
 
 
 class NewTokenSerializer(serializers.ModelSerializer):

@@ -11,13 +11,13 @@ class TaskWithUuid(viewsets.ViewSet):
     def create(self, request, list_id):
         serializer = TokenSerializer(data=request.data)
         queryset = Task.objects.all()
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             uuid = serializer.validated_data['uuid']
             try:
                 token = Token.objects.get(uuid=uuid)
                 to_do_list = ToDoList.objects.get(id=self.kwargs['list_id'])
                 token.task.to_do_lists.add(to_do_list)
-                return token.task
+                return Response("task was added")
             except ValidationError:
                 return Response("invalid token format")
             except Token.DoesNotExist:
