@@ -8,10 +8,10 @@ from tasks_management.v4.serializers import TaskSerializer
 class EditTaskView(generics.RetrieveUpdateAPIView):
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
-    lookup_field = 'id'
+    lookup_field = "id"
 
     def get_object(self):
-        return Task.objects.get(id=self.kwargs['task_id'])
+        return Task.objects.get(id=self.kwargs["task_id"])
 
     def perform_update(self, serializer):
         instance = self.get_object()
@@ -24,5 +24,3 @@ class EditTaskView(generics.RetrieveUpdateAPIView):
             return Response(serializer.data)
         except Task.DoesNotExist:
             return Response("id is not valid")
-
-

@@ -1,4 +1,4 @@
-from django.db.models import Case, When, Value
+from django.db.models import Case, Value, When
 from rest_framework import generics
 
 from tasks_management.models import Task
@@ -15,7 +15,7 @@ class TasksView(generics.ListAPIView):
             When(priority=Task.Priority.LOW, then=Value(3)),
         )
         tasks = (
-            Task.objects.filter(to_do_lists__id=self.kwargs['list_id'])
+            Task.objects.filter(to_do_lists__id=self.kwargs["list_id"])
             .annotate(priority_order=priority_order)
             .order_by("due_date", "priority_order")
         )

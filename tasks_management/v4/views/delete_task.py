@@ -11,8 +11,8 @@ class DeleteTaskView(generics.DestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         try:
-            task = Task.objects.get(id=self.kwargs['task_id'])
-            to_do_list = ToDoList.objects.get(id=self.kwargs['list_id'])
+            task = Task.objects.get(id=self.kwargs["task_id"])
+            to_do_list = ToDoList.objects.get(id=self.kwargs["list_id"])
             if task.to_do_lists.filter(id=to_do_list.id).exists():
                 task.to_do_lists.remove(to_do_list)
             else:

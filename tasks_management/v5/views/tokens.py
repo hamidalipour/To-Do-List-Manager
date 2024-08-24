@@ -1,9 +1,8 @@
-from django.core.exceptions import ValidationError
 from rest_framework import viewsets
 from rest_framework.response import Response
 
-from tasks_management.models import ToDoList, Task, Token
-from tasks_management.v5.serializers import NewTokenSerializer, TokenSerializer
+from tasks_management.models import Task, Token
+from tasks_management.v5.serializers import NewTokenSerializer
 
 
 class TokenView(viewsets.ViewSet):

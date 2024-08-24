@@ -8,15 +8,21 @@ router = routers.DefaultRouter()
 # router.register(r'groups', views.GroupViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('to-do-lists', views.ToDoListsView.as_view(), name='to-do-lists-page-v4'),
-    path('create-to-do-list', views.CreateToDoListView.as_view(), name='create-to-do-list-v4'),
+    path("", include(router.urls)),
+    path("to-do-lists", views.ToDoListsView.as_view(), name="to-do-lists-page-v4"),
+    path(
+        "create-to-do-list",
+        views.CreateToDoListView.as_view(),
+        name="create-to-do-list-v4",
+    ),
     path(
         "to-do-lists/<int:list_id>",
         views.TasksView.as_view(),
         name="tasks-page-v4",
     ),
-    path("create-task/<int:list_id>", views.CreateTask.as_view(), name="create-task-v4"),
+    path(
+        "create-task/<int:list_id>", views.CreateTask.as_view(), name="create-task-v4"
+    ),
     path(
         "delete-to-do-list/<int:list_id>",
         views.DeleteToDoListView.as_view(),

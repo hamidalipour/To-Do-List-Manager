@@ -1,9 +1,10 @@
 from django.core.exceptions import ValidationError
-from rest_framework.decorators import action
 from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
 from tasks_management.models import ToDoList, Token
 from tasks_management.v6.serializers import ToDoListSerializer, TokenSerializer
-from rest_framework.response import Response
 
 
 class ToDoListsView(viewsets.ModelViewSet):
@@ -24,9 +25,9 @@ class ToDoListsView(viewsets.ModelViewSet):
                 task.delete()
         return instance.delete()
 
-    @action(detail=True, methods=['POST'])
+    @action(detail=True, methods=["POST"])
     def create_task_with_uuid(self, request, pk=None):
-        uuid = self.request.POST['uuid']
+        uuid = self.request.POST["uuid"]
         try:
             token = Token.objects.get(uuid=uuid)
             to_do_list = self.get_object()
@@ -36,4 +37,3 @@ class ToDoListsView(viewsets.ModelViewSet):
             return Response("invalid token format")
         except Token.DoesNotExist:
             return Response("token doesn't exist")
-
