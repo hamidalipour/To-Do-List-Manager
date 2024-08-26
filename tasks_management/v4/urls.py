@@ -34,7 +34,7 @@ urlpatterns = [
         name="create-task-with-uuid-v4",
     ),
     path(
-        "delete-task/<int:task_id>/<int:list_id>",
+        "delete-task/<int:task_id>",
         views.DeleteTaskView.as_view(),
         name="delete-task-v4",
     ),
