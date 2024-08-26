@@ -23,18 +23,18 @@ urlpatterns = [
         name="delete-to-do-list-v5",
     ),
     path(
-        "to-do-lists/<int:list_id>",
+        "tasks/",
         views.TasksView.as_view({"get": "list"}),
         name="tasks-page-v5",
     ),
     path(
-        "create-task/<int:list_id>",
+        "create-task",
         views.TasksView.as_view({"post": "create"}),
         name="create-task-v5",
     ),
     path(
-        "delete-task/<int:task_id>/<int:list_id>",
-        views.TasksView.as_view({"delete": "destroy"}),
+        "delete-task/<int:task_id>",
+        views.TasksView.as_view({"patch": "delete_task"}),
         name="delete-task-v5",
     ),
     path(

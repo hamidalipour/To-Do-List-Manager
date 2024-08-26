@@ -29,11 +29,8 @@ class TaskSerializer(serializers.Serializer):
     list_id = serializers.IntegerField(required=False, write_only=True)
 
     def create(self, validated_data):
-        validated_data_copy = validated_data.copy()
-        validated_data_copy.pop("list_id")
-        print(validated_data_copy)
-        print(validated_data)
-        return Task.objects.create(**validated_data_copy)
+        validated_data.pop("list_id")
+        return Task.objects.create(**validated_data)
     def update(self, instance, validated_data):
         instance.title = validated_data.get("title", instance.title)
         instance.description = validated_data.get("description", instance.description)
