@@ -7,7 +7,7 @@ from tasks_management.v5.serializers import ToDoListSerializer
 
 class ToDoListsView(viewsets.ViewSet):
     def list(self, request):
-        queryset = ToDoList.objects.all()
+        queryset = ToDoList.objects.filter(user=request.user)
         serializer = ToDoListSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -23,6 +23,8 @@ class ToDoListsView(viewsets.ViewSet):
     def destroy(self, request, list_id):
         try:
             to_do_list = ToDoList.objects.get(id=list_id)
+            if to_do_list.user != self.request.user:
+                return Response("to do list doesn't belong to you")
             for task in to_do_list.task_set.all():
                 task.to_do_lists.remove(to_do_list)
                 if not task.to_do_lists.exists():
