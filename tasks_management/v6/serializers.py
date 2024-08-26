@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
 from tasks_management.models import Task, ToDoList, Token
@@ -20,12 +21,15 @@ class ToDoListSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
+    list_id = serializers.IntegerField(write_only=True, required=False)
+
     class Meta:
         model = Task
-        fields = ["id", "title", "description", "done", "due_date", "priority", "file"]
+        fields = ["id", "title", "description", "done", "due_date", "priority", "file", "list_id"]
         read_only_fields = ["id"]
 
     def create(self, validated_data):
+        validated_data.pop("list_id")
         return Task.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
@@ -38,9 +42,42 @@ class TaskSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+    def validate_list_id(self, data):
+        try:
+            to_do_list = ToDoList.objects.get(id=data)
+            print(data)
+            if to_do_list.user == self.context['request'].user:
+                return data
+            return ValidationError("this is another user's to do list")
+        except ToDoList.DoesNotExist:
+            return ValidationError("no to do list with this id")
+
+class DeleteTaskSerializer(serializers.Serializer):
+    list_id = serializers.IntegerField(write_only=True)
+
+    def validate_list_id(self, data):
+        try:
+            to_do_list = ToDoList.objects.get(id=data)
+            print(data)
+            if to_do_list.user == self.context['request'].user:
+                return data
+            return ValidationError("this is another user's to do list")
+        except ToDoList.DoesNotExist:
+            return ValidationError("no to do list with this id")
+
 
 class TokenSerializer(serializers.Serializer):
-    uuid = serializers.UUIDField()
+    list_id = serializers.IntegerField()
+
+    def validate_list_id(self, data):
+        try:
+            to_do_list = ToDoList.objects.get(id=data)
+            print(data)
+            if to_do_list.user == self.context['request'].user:
+                return data
+            return ValidationError("this is another user's to do list")
+        except ToDoList.DoesNotExist:
+            return ValidationError("no to do list with this id")
 
 
 class NewTokenSerializer(serializers.ModelSerializer):

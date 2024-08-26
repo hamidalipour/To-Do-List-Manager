@@ -8,7 +8,8 @@ from tasks_management.v6.serializers import ToDoListSerializer, TokenSerializer
 
 
 class ToDoListsView(viewsets.ModelViewSet):
-    queryset = ToDoList.objects.all()
+    def get_queryset(self):
+        return ToDoList.objects.filter(user=self.request.user)
 
     def get_serializer_class(self):
         if self.action in ["create_task_with_uuid"]:
@@ -27,7 +28,7 @@ class ToDoListsView(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["POST"])
     def create_task_with_uuid(self, request, pk=None):
-        uuid = self.request.POST["uuid"]
+        uuid = self.request.query_params['uuid']
         try:
             token = Token.objects.get(uuid=uuid)
             to_do_list = self.get_object()
