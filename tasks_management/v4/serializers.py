@@ -26,7 +26,7 @@ class TaskSerializer(serializers.Serializer):
     due_date = serializers.DateField(required=True)
     priority = serializers.ChoiceField(choices=PRIORITY, required=True)
     file = serializers.FileField(required=True)
-    list_id = serializers.IntegerField(required=True, write_only=True)
+    list_id = serializers.IntegerField(required=False, write_only=True)
 
     def create(self, validated_data):
         validated_data_copy = validated_data.copy()

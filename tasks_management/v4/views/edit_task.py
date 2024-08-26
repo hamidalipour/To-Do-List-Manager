@@ -15,7 +15,10 @@ class EditTaskView(generics.RetrieveUpdateAPIView):
 
     def perform_update(self, serializer):
         instance = self.get_object()
-        return serializer.save(instance=instance)
+        for to_do_list in instance.to_do_lists.all():
+            if to_do_list.user == self.request.user:
+                return serializer.save(instance=instance)
+        return Response("this task doesn't belong to you")
 
     def retrieve(self, request, *args, **kwargs):
         try:
