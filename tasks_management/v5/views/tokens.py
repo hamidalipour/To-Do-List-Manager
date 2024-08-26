@@ -7,7 +7,6 @@ from tasks_management.v5.serializers import NewTokenSerializer
 
 class TokenView(viewsets.ViewSet):
     def create(self, request, task_id):
-        queryset = Token.objects.all()
         serializer = NewTokenSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             task = Task.objects.get(id=task_id)
