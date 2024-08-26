@@ -48,7 +48,7 @@ urlpatterns = [
         name="create-uuid-v5",
     ),
     path(
-        "create-task-with-uuid/<int:list_id>",
+        "create-task-with-uuid/",
         views.TaskWithUuid.as_view({"post": "create"}),
         name="create-task-with-uuid-v5",
     ),

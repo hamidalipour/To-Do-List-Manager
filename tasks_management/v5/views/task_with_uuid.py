@@ -7,14 +7,13 @@ from tasks_management.v5.serializers import TokenSerializer
 
 
 class TaskWithUuid(viewsets.ViewSet):
-    def create(self, request, list_id):
-        serializer = TokenSerializer(data=request.data)
-        queryset = Task.objects.all()
+    def create(self, request):
+        serializer = TokenSerializer(data=request.data, context={'request': request})
         if serializer.is_valid(raise_exception=True):
-            uuid = serializer.validated_data["uuid"]
+            uuid = self.request.query_params['uuid']
             try:
                 token = Token.objects.get(uuid=uuid)
-                to_do_list = ToDoList.objects.get(id=self.kwargs["list_id"])
+                to_do_list = serializer.validated_data["list_id"]
                 token.task.to_do_lists.add(to_do_list)
                 return Response("task was added")
             except ValidationError:

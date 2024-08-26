@@ -67,7 +67,17 @@ class DeleteTaskSerializer(serializers.Serializer):
 
 
 class TokenSerializer(serializers.Serializer):
-    uuid = serializers.UUIDField()
+    list_id = serializers.IntegerField()
+
+    def validate_list_id(self, data):
+        try:
+            to_do_list = ToDoList.objects.get(id=data)
+            print(data)
+            if to_do_list.user == self.context['request'].user:
+                return data
+            return ValidationError("this is another user's to do list")
+        except ToDoList.DoesNotExist:
+            return ValidationError("no to do list with this id")
 
 
 class NewTokenSerializer(serializers.ModelSerializer):
