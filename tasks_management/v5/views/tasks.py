@@ -39,7 +39,6 @@ class TasksView(viewsets.ViewSet):
         return Response(serializer.data)
 
     def create(self, request):
-        queryset = Task.objects.all()
         serializer = TaskSerializer(data=request.data, context={'request': request})
         if serializer.is_valid(raise_exception=True):
             task = serializer.save()
@@ -52,8 +51,6 @@ class TasksView(viewsets.ViewSet):
         serializer = DeleteTaskSerializer(task, data=request.data, context={'request': request})
         if serializer.is_valid(raise_exception=True):
             to_do_list = ToDoList.objects.get(id=serializer.validated_data['list_id'])
-            # if to_do_list.user != self.request.user:
-            #     return Response("it is not your to do list")
             if task.to_do_lists.filter(id=to_do_list.id).exists():
                 task.to_do_lists.remove(to_do_list)
             else:
@@ -63,7 +60,6 @@ class TasksView(viewsets.ViewSet):
             return Response("task was deleted")
 
     def update(self, request, task_id):
-        queryset = Task.objects.all()
         task = Task.objects.get(id=task_id)
         for to_do_list in task.to_do_lists.all():
             if to_do_list.user == self.request.user:
