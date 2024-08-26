@@ -6,18 +6,26 @@ from tasks_management.models import Task, ToDoList, Token
 from tasks_management.v4.serializers import TokenSerializer
 
 
-class CreateTaskWithUuidView(generics.CreateAPIView):
+class CreateTaskWithUuidView(generics.RetrieveUpdateAPIView):
     serializer_class = TokenSerializer
     queryset = Task.objects.all()
+    lookup_field = "uuid"
 
-    def perform_create(self, serializer):
-        uuid = serializer.validated_data["uuid"]
+    def get_object(self):
+        token = Token.objects.get(uuid=self.request.query_params['uuid'])
+        return token.task
+
+    def perform_update(self, serializer):
+        list_id = serializer.validated_data["list_id"]
+        print(list_id)
         try:
-            token = Token.objects.get(uuid=uuid)
-            to_do_list = ToDoList.objects.get(id=self.kwargs["list_id"])
-            token.task.to_do_lists.add(to_do_list)
-            return token.task
+            instance = self.get_object()
+            to_do_list = ToDoList.objects.get(id=list_id)
+            instance.to_do_lists.add(to_do_list)
+            return instance
         except ValidationError:
             return Response("invalid token format")
         except Token.DoesNotExist:
             return Response("token doesn't exist")
+        except ToDoList.DoesNotExist:
+            return Response("invalid to do list id")

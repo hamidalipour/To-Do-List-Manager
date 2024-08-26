@@ -56,7 +56,7 @@ class TaskSerializer(serializers.Serializer):
 
 
 class TokenSerializer(serializers.Serializer):
-    uuid = serializers.UUIDField()
+    list_id = serializers.IntegerField(required=True, write_only=True)
 
 
 class NewTokenSerializer(serializers.Serializer):
