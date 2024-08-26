@@ -16,12 +16,12 @@ urlpatterns = [
         name="create-to-do-list-v4",
     ),
     path(
-        "to-do-lists/<int:list_id>",
+        "tasks/",
         views.TasksView.as_view(),
         name="tasks-page-v4",
     ),
     path(
-        "create-task/<int:list_id>", views.CreateTask.as_view(), name="create-task-v4"
+        "create-task", views.CreateTask.as_view(), name="create-task-v4"
     ),
     path(
         "delete-to-do-list/<int:list_id>",
