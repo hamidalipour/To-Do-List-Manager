@@ -65,6 +65,17 @@ class TokenSerializer(serializers.Serializer):
 
 class NewTokenSerializer(serializers.Serializer):
     uuid = serializers.UUIDField(read_only=True)
+    task_id = serializers.IntegerField(write_only=True)
 
     def create(self, validated_data):
         return Token.objects.create(**validated_data)
+
+    def validate_task_id(self, data):
+        print("yooo")
+        if not Task.objects.filter(id=data).exists():
+            raise ValidationError("no task with this id")
+        print("kjsdfnin")
+        if Task.objects.filter(to_do_lists__user=self.context['request'].user).filter(id=data).exists():
+            return data
+        raise ValidationError("this is another user's task")
+
