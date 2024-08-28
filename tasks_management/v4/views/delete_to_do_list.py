@@ -15,11 +15,11 @@ class DeleteToDoListView(generics.RetrieveDestroyAPIView):
             return Response("it is not your to do list")
         return to_do_list
 
-    #ToDo override delete in to do list model
     def delete(self, request, *args, **kwargs):
-        try:
-            to_do_list = self.get_object()
-            to_do_list.delete()
-            return Response("to do list was deleted")
-        except ToDoList.DoesNotExist:
+        if not ToDoList.objects.filter(id=self.kwargs['list_id']).exists():
             return Response("Invalid id")
+        to_do_list = self.queryset.get(id=self.kwargs["list_id"])
+        if to_do_list.user != self.request.user:
+            return Response("it is not your to do list")
+        to_do_list.delete()
+        return Response("to do list was deleted")

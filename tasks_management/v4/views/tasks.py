@@ -9,14 +9,14 @@ from tasks_management.v4.serializers import TaskSerializer
 class TasksView(generics.ListAPIView):
     serializer_class = TaskSerializer
 
-    #Todo check with if not try catch
     def get_queryset(self):
         priority_order = Case(
             When(priority=Task.Priority.HIGH, then=Value(1)),
             When(priority=Task.Priority.MEDIUM, then=Value(2)),
             When(priority=Task.Priority.LOW, then=Value(3)),
         )
-
+        if not ToDoList.objects.filter(id=self.request.query_params['list_id']).exists():
+            return None
         try:
             to_do_list = ToDoList.objects.get(id=self.request.query_params['list_id'])
             if to_do_list.user == self.request.user:
@@ -33,7 +33,5 @@ class TasksView(generics.ListAPIView):
                 .annotate(priority_order=priority_order)
                 .order_by("due_date", "priority_order")
             )
-        except ToDoList.DoesNotExist:
-            return None
 
         return tasks

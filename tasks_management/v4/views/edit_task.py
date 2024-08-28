@@ -13,19 +13,13 @@ class EditTaskView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         return Task.objects.get(id=self.kwargs["task_id"])
 
-    #ToDo override update instead
-    def perform_update(self, serializer):
+    def update(self, request, *args, **kwargs):
+        if not Task.objects.filter(id=self.kwargs['task_id']).exists():
+            return Response("invalid task id")
         instance = self.get_object()
-        for to_do_list in instance.to_do_lists.all():
-            if to_do_list.user == self.request.user:
-                return serializer.save(instance=instance)
-        return Response("this task doesn't belong to you")
-
-    #Todo check if it is needed
-    def retrieve(self, request, *args, **kwargs):
-        try:
-            instance = self.get_object()
-            serializer = TaskSerializer(instance)
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        if Task.objects.filter(to_do_lists__user=self.request.user).filter(id=instance.id).exists():
+            serializer.save(instance=instance)
             return Response(serializer.data)
-        except Task.DoesNotExist:
-            return Response("id is not valid")
+        return Response("this task doesn't belong to you")
