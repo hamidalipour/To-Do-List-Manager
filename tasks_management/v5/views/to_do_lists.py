@@ -24,9 +24,5 @@ class ToDoListsView(viewsets.ViewSet):
         to_do_list = ToDoList.objects.get(id=list_id)
         # if to_do_list.user != self.request.user:
         #     return Response("to do list doesn't belong to you")
-        for task in to_do_list.task_set.all():
-            task.to_do_lists.remove(to_do_list)
-            if not task.to_do_lists.exists():
-                task.delete()
         to_do_list.delete()
         return Response("to do list was deleted")

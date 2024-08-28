@@ -12,10 +12,6 @@ class DeleteToDoListView(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         to_do_list = ToDoList.objects.get(id=self.kwargs["list_id"])
-        for task in to_do_list.task_set.all():
-            task.to_do_lists.remove(to_do_list)
-            if not task.to_do_lists.exists():
-                task.delete()
         to_do_list.delete()
         return super().form_valid(form)
 

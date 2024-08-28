@@ -10,4 +10,9 @@ class ToDoList(models.Model):
     def __str__(self):
         return self.title
 
-    #ToDo override delete function
+    def __delete__(self, instance):
+        for task in instance.task_set.all():
+            task.to_do_lists.remove(instance)
+            if not task.to_do_lists.exists():
+                task.delete()
+        return super(self, instance)
