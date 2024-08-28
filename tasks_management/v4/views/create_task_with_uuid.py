@@ -18,14 +18,6 @@ class CreateTaskWithUuidView(generics.RetrieveUpdateAPIView):
     def perform_update(self, serializer):
         list_id = serializer.validated_data["list_id"]
         print(list_id)
-        try:
-            instance = self.get_object()
-            to_do_list = ToDoList.objects.get(id=list_id)
-            instance.to_do_lists.add(to_do_list)
-            return instance
-        except ValidationError:
-            return Response("invalid token format")
-        except Token.DoesNotExist:
-            return Response("token doesn't exist")
-        except ToDoList.DoesNotExist:
-            return Response("invalid to do list id")
+        instance = self.get_object()
+        to_do_list = ToDoList.objects.get(id=list_id)
+        instance.to_do_lists.add(to_do_list)

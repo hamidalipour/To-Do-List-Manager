@@ -8,11 +8,11 @@ from tasks_management.v4.serializers import TaskSerializer
 class DeleteTaskView(generics.RetrieveUpdateAPIView):
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
-    lookup_field = 'id'
 
     def get_object(self):
         return Task.objects.get(id=self.kwargs['task_id'])
 
+    #ToDo override update instead
     def perform_update(self, serializer):
         try:
             instance = self.get_object()

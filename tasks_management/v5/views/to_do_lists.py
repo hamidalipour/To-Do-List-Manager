@@ -12,7 +12,6 @@ class ToDoListsView(viewsets.ViewSet):
         return Response(serializer.data)
 
     def create(self, request):
-        queryset = ToDoList.objects.all()
         serializer = ToDoListSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(user=request.user)
@@ -21,15 +20,13 @@ class ToDoListsView(viewsets.ViewSet):
             return Response(serializer.error_messages)
 
     def destroy(self, request, list_id):
-        try:
-            to_do_list = ToDoList.objects.get(id=list_id)
-            if to_do_list.user != self.request.user:
-                return Response("to do list doesn't belong to you")
-            for task in to_do_list.task_set.all():
-                task.to_do_lists.remove(to_do_list)
-                if not task.to_do_lists.exists():
-                    task.delete()
-            to_do_list.delete()
-            return Response("to do list was deleted")
-        except ToDoList.DoesNotExist:
-            return Response("Invalid id")
+        #ToDo
+        to_do_list = ToDoList.objects.get(id=list_id)
+        # if to_do_list.user != self.request.user:
+        #     return Response("to do list doesn't belong to you")
+        for task in to_do_list.task_set.all():
+            task.to_do_lists.remove(to_do_list)
+            if not task.to_do_lists.exists():
+                task.delete()
+        to_do_list.delete()
+        return Response("to do list was deleted")

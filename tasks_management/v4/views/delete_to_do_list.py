@@ -15,6 +15,7 @@ class DeleteToDoListView(generics.RetrieveDestroyAPIView):
             return Response("it is not your to do list")
         return to_do_list
 
+    #ToDo override delete in to do list model
     def delete(self, request, *args, **kwargs):
         try:
             to_do_list = self.get_object()

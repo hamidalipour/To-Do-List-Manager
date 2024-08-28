@@ -42,6 +42,7 @@ class TaskSerializer(serializers.Serializer):
         return instance
 
     def validate_list_id(self, data):
+        #ToDo delete try catch and raise validation
         try:
             to_do_list = ToDoList.objects.get(id=data)
             if to_do_list.user == self.context['request'].user:
@@ -54,6 +55,7 @@ class TaskSerializer(serializers.Serializer):
 
 class TokenSerializer(serializers.Serializer):
     list_id = serializers.IntegerField(required=True, write_only=True)
+    #ToDo validation
 
 
 class NewTokenSerializer(serializers.Serializer):

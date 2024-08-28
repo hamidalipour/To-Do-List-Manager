@@ -42,6 +42,7 @@ class TasksView(viewsets.ViewSet):
         serializer = TaskSerializer(data=request.data, context={'request': request})
         if serializer.is_valid(raise_exception=True):
             task = serializer.save()
+            #Todo next line should be in serializer create
             task.to_do_lists.add(ToDoList.objects.get(id=serializer.validated_data['list_id']))
             return Response(serializer.data)
 
@@ -59,8 +60,11 @@ class TasksView(viewsets.ViewSet):
                 task.delete()
             return Response("task was deleted")
 
+
+    #Todo create new serializer
     def update(self, request, task_id):
         task = Task.objects.get(id=task_id)
+        #ToDo use one w=query instead of for
         for to_do_list in task.to_do_lists.all():
             if to_do_list.user == self.request.user:
                 serializer = TaskSerializer(instance=task, data=request.data)

@@ -10,6 +10,7 @@ class TokenView(viewsets.ViewSet):
         serializer = NewTokenSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             task = Task.objects.get(id=task_id)
+            #Todo use one query instead of for
             for to_do_list in task.to_do_lists.all():
                 if to_do_list.user == self.request.user:
                     serializer.save(task=task)

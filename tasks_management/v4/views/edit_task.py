@@ -13,6 +13,7 @@ class EditTaskView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         return Task.objects.get(id=self.kwargs["task_id"])
 
+    #ToDo override update instead
     def perform_update(self, serializer):
         instance = self.get_object()
         for to_do_list in instance.to_do_lists.all():
@@ -20,6 +21,7 @@ class EditTaskView(generics.RetrieveUpdateAPIView):
                 return serializer.save(instance=instance)
         return Response("this task doesn't belong to you")
 
+    #Todo check if it is needed
     def retrieve(self, request, *args, **kwargs):
         try:
             instance = self.get_object()

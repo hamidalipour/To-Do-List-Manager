@@ -9,6 +9,7 @@ from tasks_management.v4.serializers import TaskSerializer
 class TasksView(generics.ListAPIView):
     serializer_class = TaskSerializer
 
+    #Todo check with if not try catch
     def get_queryset(self):
         priority_order = Case(
             When(priority=Task.Priority.HIGH, then=Value(1)),
