@@ -12,9 +12,8 @@ class TokensView(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         if serializer.is_valid(raise_exception=True):
             task = Task.objects.get(id=self.request.POST["task_id"])
-            for to_do_list in task.to_do_lists.all():
-                if to_do_list.user == self.request.user:
-                    serializer.save(task=task)
-                    return Response(serializer.data)
+            if Task.objects.filter(to_do_lists__user=self.request.user).filter(id=task.id).exists():
+                serializer.save(task=task)
+                return Response(serializer.data)
             return Response("task doesn't belong to you")
 
