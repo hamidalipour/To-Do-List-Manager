@@ -17,17 +17,17 @@ class ToDoListsView(viewsets.ModelViewSet):
         return ToDoListSerializer
 
     def perform_create(self, serializer):
-        return serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user)
 
     @action(detail=True, methods=["POST"])
     def create_task_with_uuid(self, request, pk=None):
         uuid = self.request.query_params['uuid']
         try:
             token = Token.objects.get(uuid=uuid)
-            to_do_list = self.get_object()
-            token.task.to_do_lists.add(to_do_list)
-            return Response("task was added")
         except ValidationError:
             return Response("invalid token format")
         except Token.DoesNotExist:
             return Response("token doesn't exist")
+        to_do_list = self.get_object()
+        token.task.to_do_lists.add(to_do_list)
+        return Response("task was added")
