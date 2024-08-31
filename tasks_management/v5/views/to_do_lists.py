@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework.response import Response
 
@@ -20,9 +21,8 @@ class ToDoListsView(viewsets.ViewSet):
             return Response(serializer.error_messages)
 
     def destroy(self, request, list_id):
-        #ToDo
+        if not ToDoList.objects.filter(Q(id=list_id) & Q(user=self.request.user)).exists():
+            return Response("invalid id")
         to_do_list = ToDoList.objects.get(id=list_id)
-        # if to_do_list.user != self.request.user:
-        #     return Response("to do list doesn't belong to you")
         to_do_list.delete()
         return Response("to do list was deleted")
