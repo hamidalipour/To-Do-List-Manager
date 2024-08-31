@@ -11,14 +11,13 @@ class TaskWithUuid(viewsets.ViewSet):
         serializer = TokenSerializer(data=request.data, context={'request': request})
         if serializer.is_valid(raise_exception=True):
             uuid = self.request.query_params['uuid']
-            #Todo move lines out of try catch
             try:
                 token = Token.objects.get(uuid=uuid)
-                to_do_list = serializer.validated_data["list_id"]
-                token.task.to_do_lists.add(to_do_list)
-                return Response("task was added")
             except ValidationError:
                 return Response("invalid token format")
             except Token.DoesNotExist:
                 return Response("token doesn't exist")
+            to_do_list = serializer.validated_data["list_id"]
+            token.task.to_do_lists.add(to_do_list)
+            return Response("task was added")
         return Response(serializer.error_messages)

@@ -29,8 +29,27 @@ class TaskSerializer(serializers.ModelSerializer):
         read_only_fields = ["id"]
 
     def create(self, validated_data):
-        validated_data.pop("list_id")
-        return Task.objects.create(**validated_data)
+        list_id = validated_data.pop("list_id")
+        task = Task.objects.create(**validated_data)
+        task.to_do_lists.add(ToDoList.objects.get(id=list_id))
+        return task
+
+    def validate_list_id(self, data):
+        try:
+            to_do_list = ToDoList.objects.get(id=data)
+            print(data)
+            if to_do_list.user == self.context['request'].user:
+                return data
+            return ValidationError("this is another user's to do list")
+        except ToDoList.DoesNotExist:
+            return ValidationError("no to do list with this id")
+
+
+class UpdateTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ["id", "title", "description", "done", "due_date", "priority", "file"]
+        read_only_fields = ["id"]
 
     def update(self, instance, validated_data):
         instance.title = validated_data.get("title", instance.title)
@@ -42,15 +61,6 @@ class TaskSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-    def validate_list_id(self, data):
-        try:
-            to_do_list = ToDoList.objects.get(id=data)
-            print(data)
-            if to_do_list.user == self.context['request'].user:
-                return data
-            return ValidationError("this is another user's to do list")
-        except ToDoList.DoesNotExist:
-            return ValidationError("no to do list with this id")
 
 class DeleteTaskSerializer(serializers.Serializer):
     list_id = serializers.IntegerField(write_only=True)

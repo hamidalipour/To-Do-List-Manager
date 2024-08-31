@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 
 from tasks_management.models import Task, ToDoList
-from tasks_management.v5.serializers import TaskSerializer, DeleteTaskSerializer
+from tasks_management.v5.serializers import TaskSerializer, DeleteTaskSerializer, UpdateTaskSerializer
 
 
 class TasksView(viewsets.ViewSet):
@@ -42,8 +42,6 @@ class TasksView(viewsets.ViewSet):
         serializer = TaskSerializer(data=request.data, context={'request': request})
         if serializer.is_valid(raise_exception=True):
             task = serializer.save()
-            #Todo next line should be in serializer create
-            task.to_do_lists.add(ToDoList.objects.get(id=serializer.validated_data['list_id']))
             return Response(serializer.data)
 
     @action(detail=True, methods=["PATCH"])
@@ -60,17 +58,13 @@ class TasksView(viewsets.ViewSet):
                 task.delete()
             return Response("task was deleted")
 
-
-    #Todo create new serializer
     def update(self, request, task_id):
-        task = Task.objects.get(id=task_id)
-        #ToDo use one w=query instead of for
-        for to_do_list in task.to_do_lists.all():
-            if to_do_list.user == self.request.user:
-                serializer = TaskSerializer(instance=task, data=request.data)
-                if serializer.is_valid():
-                    serializer.save()
-                    return Response(serializer.data)
-                else:
-                    return Response(serializer.error_messages)
+        if Task.objects.filter(to_do_lists__user=self.request.user).filter(id=task_id).exists():
+            task = Task.objects.get(id=task_id)
+            serializer = UpdateTaskSerializer(instance=task, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response(serializer.error_messages)
         return Response("task doesn't belong to you")
