@@ -17,6 +17,10 @@ class ToDoListSerializer(serializers.Serializer):
     def create(self, validated_data):
         return ToDoList.objects.create(**validated_data)
 
+    def validate_title(self, data):
+        if len(data) < 8:
+            raise ValidationError("title is too short")
+        return data
 
 class TaskSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
