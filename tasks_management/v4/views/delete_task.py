@@ -9,22 +9,17 @@ class DeleteTaskView(generics.RetrieveUpdateAPIView):
     serializer_class = DeleteTaskSerializer
     queryset = Task.objects.all()
 
-    #Todo override get queryset delete lines 14 15 16 and use get object. lines 19 and 20 should go to serializer
     def update(self, request, *args, **kwargs):
-        if not Task.objects.filter(id=self.kwargs['task_id']).exists():
-            return Response("invalid id")
-        instance = Task.objects.get(id=self.kwargs['task_id'])
+        instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        to_do_list = ToDoList.objects.get(id=serializer.validated_data['list_id'])
-        if to_do_list.user != self.request.user:
-            return Response("it is not your to do list")
-        if instance.to_do_lists.filter(id=to_do_list.id).exists():
-            instance.to_do_lists.remove(to_do_list)
-        else:
-            return Response("task is not in this to do list")
-        if not instance.to_do_lists.exists():
-            instance.delete()
-        return Response(serializer.data)
+        if serializer.is_valid(raise_exception=True):
+            to_do_list = ToDoList.objects.get(id=serializer.validated_data['list_id'])
+            if instance.to_do_lists.filter(id=to_do_list.id).exists():
+                instance.to_do_lists.remove(to_do_list)
+            else:
+                return Response("task is not in this to do list")
+            if not instance.to_do_lists.exists():
+                instance.delete()
+            return Response(serializer.data)
 
 
