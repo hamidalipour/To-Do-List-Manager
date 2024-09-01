@@ -10,11 +10,3 @@ class TokensView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Token.objects.filter(task__to_do_lists__user=self.request.user)
-
-    def perform_create(self, serializer):
-        if not Task.objects.filter(to_do_lists__user=self.request.user).filter(
-                id=self.request.POST["task_id"]).exists():
-            return Response("invalid id")
-        task = Task.objects.get(id=self.request.POST["task_id"])
-        serializer.save(task=task)
-        return Response(serializer.data)
