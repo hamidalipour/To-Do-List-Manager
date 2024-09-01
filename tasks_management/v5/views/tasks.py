@@ -10,31 +10,18 @@ from tasks_management.v5.serializers import TaskSerializer, DeleteTaskSerializer
 
 class TasksView(viewsets.ViewSet):
     def list(self, request):
-        #todo be like v4
         priority_order = Case(
             When(priority=Task.Priority.HIGH, then=Value(1)),
             When(priority=Task.Priority.MEDIUM, then=Value(2)),
             When(priority=Task.Priority.LOW, then=Value(3)),
         )
-
-        try:
-            to_do_list = ToDoList.objects.get(id=self.request.query_params['list_id'])
-            if to_do_list.user == self.request.user:
-                tasks = (
-                    Task.objects.filter(to_do_lists__id=self.request.query_params["list_id"])
-                    .annotate(priority_order=priority_order)
-                    .order_by("due_date", "priority_order")
-                )
-            else:
-                return Response("this to do list doesn't belong to you")
-        except MultiValueDictKeyError:
-            tasks = (
-                Task.objects.filter(to_do_lists__user=self.request.user)
-                .annotate(priority_order=priority_order)
-                .order_by("due_date", "priority_order")
-            )
-        except ToDoList.DoesNotExist:
-            return Response("invalid to do list id")
+        tasks = (
+            Task.objects.filter(to_do_lists__user=self.request.user)
+            .annotate(priority_order=priority_order)
+            .order_by("due_date", "priority_order")
+        )
+        if not self.request.query_params["list_id"].isnumeric() and 'list_id' in self.request.query_params:
+            tasks = tasks.filter(to_do_lists__id=self.request.query_params["list_id"])
 
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data)

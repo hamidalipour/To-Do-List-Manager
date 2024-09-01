@@ -19,8 +19,6 @@ class TasksView(generics.ListAPIView):
             .annotate(priority_order=priority_order)
             .order_by("due_date", "priority_order")
         )
-        if not self.request.query_params["list_id"].isnumeric():
-            return tasks
-        if 'list_id' in self.request.query_params:
+        if not self.request.query_params["list_id"].isnumeric() and 'list_id' in self.request.query_params:
             tasks = tasks.filter(to_do_lists__id=self.request.query_params["list_id"])
         return tasks

@@ -10,8 +10,7 @@ class TaskWithUuid(viewsets.ViewSet):
     def create(self, request):
         serializer = TokenSerializer(data=request.data, context={'request': request})
         if serializer.is_valid(raise_exception=True):
-            #Todo uuid should go to url
-            uuid = self.request.query_params['uuid']
+            uuid = self.kwargs['uuid']
             try:
                 token = Token.objects.get(uuid=uuid)
             except ValidationError:
