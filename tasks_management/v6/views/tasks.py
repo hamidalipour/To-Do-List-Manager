@@ -13,6 +13,7 @@ class TasksView(viewsets.ModelViewSet):
         if self.action in ["delete"]:
             return DeleteTaskSerializer
         return TaskSerializer
+
     def get_queryset(self):
         priority_order = Case(
             When(priority=Task.Priority.HIGH, then=Value(1)),
@@ -44,9 +45,9 @@ class TasksView(viewsets.ModelViewSet):
         if serializer.is_valid(raise_exception=True):
             task = serializer.save()
             task.to_do_lists.add(ToDoList.objects.get(id=serializer.validated_data['list_id']))
-            return task
 
-    def perform_destroy(self, instance):
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
         serializer = DeleteTaskSerializer(instance, data=self.request.data, context={'request': self.request})
         if serializer.is_valid(raise_exception=True):
             to_do_list = ToDoList.objects.get(id=serializer.validated_data['list_id'])
@@ -58,14 +59,12 @@ class TasksView(viewsets.ModelViewSet):
                 instance.delete()
             return Response("task was deleted")
 
-    def perform_update(self, serializer):
-        if serializer.is_valid():
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data)
+        if serializer.is_valid(raise_exception=True):
             task = self.get_object()
-            for to_do_list in task.to_do_lists.all():
-                if to_do_list.user == self.request.user:
-                    serializer.save()
-                    return Response(serializer.data)
-
+            if Task.objects.filter(to_do_lists__user=self.request.user).filter(id=task.id).exists():
+                serializer.save()
+                return Response(serializer.data)
             return Response("task doesn't belong to you")
-        else:
-            return Response(serializer.error_messages)
