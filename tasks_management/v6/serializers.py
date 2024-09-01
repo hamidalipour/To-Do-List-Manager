@@ -36,7 +36,6 @@ class TaskSerializer(serializers.ModelSerializer):
             validated_data.pop('list_id')
         return super().update(instance, validated_data)
 
-    #Todo change all validate_list_id like this
     def validate_list_id(self, data):
         if not ToDoList.objects.filter(id=data, user=self.context['request'].user).exists():
             raise ValidationError("invalid id")
