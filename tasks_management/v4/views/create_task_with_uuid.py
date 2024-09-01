@@ -11,14 +11,6 @@ class CreateTaskWithUuidView(generics.RetrieveUpdateAPIView):
     queryset = Task.objects.all()
     lookup_field = "uuid"
 
-    #Todo uuid should go to url not be a query param
     def get_object(self):
-        token = Token.objects.get(uuid=self.request.query_params['uuid'])
+        token = Token.objects.get(uuid=self.kwargs['uuid'])
         return token.task
-
-#Todo should go to serializer
-    def perform_update(self, serializer):
-        list_id = serializer.validated_data["list_id"]
-        instance = self.get_object()
-        to_do_list = ToDoList.objects.get(id=list_id)
-        instance.to_do_lists.add(to_do_list)

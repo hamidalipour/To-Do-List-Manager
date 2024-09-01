@@ -68,6 +68,12 @@ class DeleteTaskSerializer(serializers.Serializer):
 class TokenSerializer(serializers.Serializer):
     list_id = serializers.IntegerField(required=True, write_only=True)
 
+    def update(self, instance, validated_data):
+        list_id = validated_data["list_id"]
+        to_do_list = ToDoList.objects.get(id=list_id)
+        instance.to_do_lists.add(to_do_list)
+        return instance
+
     def validate_list_id(self, data):
         if not ToDoList.objects.filter(id=data).exists():
             raise ValidationError("no to do list with this id")

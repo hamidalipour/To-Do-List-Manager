@@ -29,7 +29,7 @@ urlpatterns = [
         name="delete-to-do-list-v4",
     ),
     path(
-        "create-task-with-uuid/",
+        "create-task-with-uuid/<uuid:uuid>",
         views.CreateTaskWithUuidView.as_view(),
         name="create-task-with-uuid-v4",
     ),
