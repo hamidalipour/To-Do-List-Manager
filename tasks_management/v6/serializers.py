@@ -52,18 +52,12 @@ class DeleteTaskSerializer(serializers.Serializer):
 
 
 class TokenSerializer(serializers.Serializer):
-    list_id = serializers.IntegerField()
-
-    def validate_list_id(self, data):
-        if not ToDoList.objects.filter(id=data, user=self.context['request'].user).exists():
-            raise ValidationError("invalid id")
-        return data
+    uuid = serializers.UUIDField()
 
 
 class NewTokenSerializer(serializers.ModelSerializer):
     task_id = serializers.IntegerField(write_only=True)
 
-    #Todo get task_id in serializer and validate it and after that delete perform create
     class Meta:
         model = Token
         fields = ["uuid", "task_id"]

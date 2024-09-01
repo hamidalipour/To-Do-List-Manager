@@ -12,7 +12,7 @@ class ToDoListsView(viewsets.ModelViewSet):
         return ToDoList.objects.filter(user=self.request.user)
 
     def get_serializer_class(self):
-        if self.action in ["create_task_with_uuid"]:
+        if self.action in ["add_task_with_uuid"]:
             return TokenSerializer
         return ToDoListSerializer
 
@@ -21,14 +21,18 @@ class ToDoListsView(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["POST"])
     def add_task_with_uuid(self, request, pk=None):
-        #Todo move uuid to body
-        uuid = self.request.query_params['uuid']
-        try:
-            token = Token.objects.get(uuid=uuid)
-        except ValidationError:
-            return Response("invalid token format")
-        except Token.DoesNotExist:
-            return Response("token doesn't exist")
         to_do_list = self.get_object()
-        token.task.to_do_lists.add(to_do_list)
-        return Response("task was added")
+        if to_do_list.user != request.user:
+            return Response("to do list doesn't belong to you")
+        serializer_class = self.get_serializer_class()
+        serializer = serializer_class(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            uuid = serializer.validated_data['uuid']
+            try:
+                token = Token.objects.get(uuid=uuid)
+            except ValidationError:
+                return Response("invalid token format")
+            except Token.DoesNotExist:
+                return Response("token doesn't exist")
+            token.task.to_do_lists.add(to_do_list)
+            return Response("task was added")
