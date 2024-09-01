@@ -10,6 +10,7 @@ from tasks_management.v5.serializers import TaskSerializer, DeleteTaskSerializer
 
 class TasksView(viewsets.ViewSet):
     def list(self, request):
+        #todo be like v4
         priority_order = Case(
             When(priority=Task.Priority.HIGH, then=Value(1)),
             When(priority=Task.Priority.MEDIUM, then=Value(2)),
@@ -41,7 +42,7 @@ class TasksView(viewsets.ViewSet):
     def create(self, request):
         serializer = TaskSerializer(data=request.data, context={'request': request})
         if serializer.is_valid(raise_exception=True):
-            task = serializer.save()
+            serializer.save()
             return Response(serializer.data)
 
     @action(detail=True, methods=["PATCH"])
@@ -59,12 +60,11 @@ class TasksView(viewsets.ViewSet):
             return Response("task was deleted")
 
     def update(self, request, task_id):
-        if Task.objects.filter(to_do_lists__user=self.request.user).filter(id=task_id).exists():
-            task = Task.objects.get(id=task_id)
-            serializer = UpdateTaskSerializer(instance=task, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
-            else:
-                return Response(serializer.error_messages)
-        return Response("task doesn't belong to you")
+        if not Task.objects.filter(to_do_lists__user=self.request.user).filter(id=task_id).exists():
+            return Response("task doesn't belong to you")
+        task = Task.objects.get(id=task_id)
+        serializer = UpdateTaskSerializer(instance=task, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)
+

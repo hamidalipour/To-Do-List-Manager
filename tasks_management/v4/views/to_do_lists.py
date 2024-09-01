@@ -10,7 +10,3 @@ class ToDoListsView(generics.ListAPIView):
     def get_queryset(self):
         return ToDoList.objects.filter(user=self.request.user)
 
-    # def get(self, request):
-    #     to_do_lists = ToDoList.objects.filter(user=request.user)
-    #     serializer = ToDoListSerializer(to_do_lists, many=True)
-    #     return Response(serializer.data)

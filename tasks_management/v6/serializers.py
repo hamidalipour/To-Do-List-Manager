@@ -16,9 +16,6 @@ class ToDoListSerializer(serializers.ModelSerializer):
         fields = ["id", "title"]
         read_only_fields = ["id"]
 
-    def create(self, validated_data):
-        return ToDoList.objects.create(**validated_data)
-
 
 class TaskSerializer(serializers.ModelSerializer):
     list_id = serializers.IntegerField(write_only=True, required=False)
@@ -29,61 +26,46 @@ class TaskSerializer(serializers.ModelSerializer):
         read_only_fields = ["id"]
 
     def create(self, validated_data):
-        validated_data.pop("list_id")
-        return Task.objects.create(**validated_data)
+        list_id = validated_data.pop("list_id")
+        task = Task.objects.create(**validated_data)
+        task.to_do_lists.add(ToDoList.objects.get(id=list_id))
+        return task
 
     def update(self, instance, validated_data):
-        instance.title = validated_data.get("title", instance.title)
-        instance.description = validated_data.get("description", instance.description)
-        instance.done = validated_data.get("done", instance.done)
-        instance.due_date = validated_data.get("due_date", instance.due_date)
-        instance.priority = validated_data.get("priority", instance.priority)
-        instance.file = validated_data.get("file", instance.file)
-        instance.save()
-        return instance
+        if 'list_id' in validated_data:
+            validated_data.pop('list_id')
+        return super().update(instance, validated_data)
 
+    #Todo change all validate_list_id like this
     def validate_list_id(self, data):
-        try:
-            to_do_list = ToDoList.objects.get(id=data)
-            print(data)
-            if to_do_list.user == self.context['request'].user:
-                return data
-            return ValidationError("this is another user's to do list")
-        except ToDoList.DoesNotExist:
-            return ValidationError("no to do list with this id")
+        if not ToDoList.objects.filter(id=data, user=self.context['request'].user).exists():
+            raise ValidationError("invalid id")
+        return data
+
 
 class DeleteTaskSerializer(serializers.Serializer):
     list_id = serializers.IntegerField(write_only=True)
 
     def validate_list_id(self, data):
-        try:
-            to_do_list = ToDoList.objects.get(id=data)
-            if to_do_list.user == self.context['request'].user:
-                return data
-            raise ValidationError("this is another user's to do list")
-        except ToDoList.DoesNotExist:
-            raise ValidationError("no to do list with this id")
+        if not ToDoList.objects.filter(id=data, user=self.context['request'].user).exists():
+            raise ValidationError("invalid id")
+        return data
 
 
 class TokenSerializer(serializers.Serializer):
     list_id = serializers.IntegerField()
 
     def validate_list_id(self, data):
-        try:
-            to_do_list = ToDoList.objects.get(id=data)
-            print(data)
-            if to_do_list.user == self.context['request'].user:
-                return data
-            return ValidationError("this is another user's to do list")
-        except ToDoList.DoesNotExist:
-            return ValidationError("no to do list with this id")
+        if not ToDoList.objects.filter(id=data, user=self.context['request'].user).exists():
+            raise ValidationError("invalid id")
+        return data
 
 
 class NewTokenSerializer(serializers.ModelSerializer):
+    #Todo get task_id in serializer and validate it and after that delete perform create
     class Meta:
         model = Token
         fields = ["uuid"]
         read_only_fields = ["uuid"]
 
-    def create(self, validated_data):
-        return Token.objects.create(**validated_data)
+

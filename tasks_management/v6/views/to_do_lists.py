@@ -20,7 +20,8 @@ class ToDoListsView(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
     @action(detail=True, methods=["POST"])
-    def create_task_with_uuid(self, request, pk=None):
+    def add_task_with_uuid(self, request, pk=None):
+        #Todo move uuid to body
         uuid = self.request.query_params['uuid']
         try:
             token = Token.objects.get(uuid=uuid)

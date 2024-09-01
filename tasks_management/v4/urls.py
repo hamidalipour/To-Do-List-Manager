@@ -24,7 +24,7 @@ urlpatterns = [
         "create-task", views.CreateTask.as_view(), name="create-task-v4"
     ),
     path(
-        "delete-to-do-list/<int:list_id>",
+        "delete-to-do-list/<int:pk>",
         views.DeleteToDoListView.as_view(),
         name="delete-to-do-list-v4",
     ),
@@ -44,7 +44,7 @@ urlpatterns = [
         name="create-uuid-v4",
     ),
     path(
-        "edit-task/<int:task_id>",
+        "edit-task/<int:pk>",
         views.EditTaskView.as_view(),
         name="edit-task-v4",
     ),

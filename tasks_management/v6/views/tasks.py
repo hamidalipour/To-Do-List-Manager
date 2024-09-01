@@ -15,6 +15,7 @@ class TasksView(viewsets.ModelViewSet):
         return TaskSerializer
 
     def get_queryset(self):
+        #Todo like v4
         priority_order = Case(
             When(priority=Task.Priority.HIGH, then=Value(1)),
             When(priority=Task.Priority.MEDIUM, then=Value(2)),
@@ -41,11 +42,6 @@ class TasksView(viewsets.ModelViewSet):
 
         return tasks
 
-    def perform_create(self, serializer):
-        if serializer.is_valid(raise_exception=True):
-            task = serializer.save()
-            task.to_do_lists.add(ToDoList.objects.get(id=serializer.validated_data['list_id']))
-
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = DeleteTaskSerializer(instance, data=self.request.data, context={'request': self.request})
@@ -58,13 +54,3 @@ class TasksView(viewsets.ModelViewSet):
             if not instance.to_do_lists.exists():
                 instance.delete()
             return Response("task was deleted")
-
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            task = self.get_object()
-            if Task.objects.filter(to_do_lists__user=self.request.user).filter(id=task.id).exists():
-                serializer.save()
-                return Response(serializer.data)
-            return Response("task doesn't belong to you")

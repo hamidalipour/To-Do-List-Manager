@@ -1,4 +1,3 @@
-from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework.response import Response
 
@@ -14,14 +13,12 @@ class ToDoListsView(viewsets.ViewSet):
 
     def create(self, request):
         serializer = ToDoListSerializer(data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user)
             return Response(serializer.data)
-        else:
-            return Response(serializer.error_messages)
 
     def destroy(self, request, list_id):
-        if not ToDoList.objects.filter(Q(id=list_id) & Q(user=self.request.user)).exists():
+        if not ToDoList.objects.filter(id=list_id, user=self.request.user).exists():
             return Response("invalid id")
         to_do_list = ToDoList.objects.get(id=list_id)
         to_do_list.delete()

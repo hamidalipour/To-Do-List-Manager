@@ -6,14 +6,15 @@ from rest_framework.response import Response
 
 
 class TokensView(viewsets.ModelViewSet):
-    queryset = Token.objects.all()
     serializer_class = NewTokenSerializer
 
-    def perform_create(self, serializer):
-        if serializer.is_valid(raise_exception=True):
-            task = Task.objects.get(id=self.request.POST["task_id"])
-            if Task.objects.filter(to_do_lists__user=self.request.user).filter(id=task.id).exists():
-                serializer.save(task=task)
-                return Response(serializer.data)
-            return Response("task doesn't belong to you")
+    def get_queryset(self):
+        return Token.objects.filter(task__to_do_lists__user=self.request.user)
 
+    def perform_create(self, serializer):
+        if not Task.objects.filter(to_do_lists__user=self.request.user).filter(
+                id=self.request.POST["task_id"]).exists():
+            return Response("invalid id")
+        task = Task.objects.get(id=self.request.POST["task_id"])
+        serializer.save(task=task)
+        return Response(serializer.data)

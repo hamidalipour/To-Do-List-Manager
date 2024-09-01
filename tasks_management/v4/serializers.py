@@ -29,8 +29,10 @@ class TaskSerializer(serializers.Serializer):
     list_id = serializers.IntegerField(required=False, write_only=True)
 
     def create(self, validated_data):
-        validated_data.pop("list_id")
-        return Task.objects.create(**validated_data)
+        list_id = validated_data.pop("list_id")
+        task = Task.objects.create(**validated_data)
+        task.to_do_lists.add(ToDoList.objects.get(id=list_id))
+        return task
 
     def update(self, instance, validated_data):
         instance.title = validated_data.get("title", instance.title)

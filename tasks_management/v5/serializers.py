@@ -40,9 +40,9 @@ class TaskSerializer(serializers.ModelSerializer):
             print(data)
             if to_do_list.user == self.context['request'].user:
                 return data
-            return ValidationError("this is another user's to do list")
+            raise ValidationError("this is another user's to do list")
         except ToDoList.DoesNotExist:
-            return ValidationError("no to do list with this id")
+            raise ValidationError("no to do list with this id")
 
 
 class UpdateTaskSerializer(serializers.ModelSerializer):
@@ -71,9 +71,9 @@ class DeleteTaskSerializer(serializers.Serializer):
             print(data)
             if to_do_list.user == self.context['request'].user:
                 return data
-            return ValidationError("this is another user's to do list")
+            raise ValidationError("this is another user's to do list")
         except ToDoList.DoesNotExist:
-            return ValidationError("no to do list with this id")
+            raise ValidationError("no to do list with this id")
 
 
 class TokenSerializer(serializers.Serializer):
@@ -85,9 +85,9 @@ class TokenSerializer(serializers.Serializer):
             print(data)
             if to_do_list.user == self.context['request'].user:
                 return data
-            return ValidationError("this is another user's to do list")
+            raise ValidationError("this is another user's to do list")
         except ToDoList.DoesNotExist:
-            return ValidationError("no to do list with this id")
+            raise ValidationError("no to do list with this id")
 
 
 class NewTokenSerializer(serializers.ModelSerializer):

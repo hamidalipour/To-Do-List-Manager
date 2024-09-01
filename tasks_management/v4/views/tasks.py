@@ -15,23 +15,12 @@ class TasksView(generics.ListAPIView):
             When(priority=Task.Priority.MEDIUM, then=Value(2)),
             When(priority=Task.Priority.LOW, then=Value(3)),
         )
-        if not ToDoList.objects.filter(id=self.request.query_params['list_id']).exists():
-            return None
-        try:
-            to_do_list = ToDoList.objects.get(id=self.request.query_params['list_id'])
-            if to_do_list.user == self.request.user:
-                tasks = (
-                    Task.objects.filter(to_do_lists__id=self.request.query_params["list_id"])
-                    .annotate(priority_order=priority_order)
-                    .order_by("due_date", "priority_order")
-                )
-            else:
-                return None
-        except MultiValueDictKeyError:
-            tasks = (
-                Task.objects.filter(to_do_lists__user=self.request.user)
-                .annotate(priority_order=priority_order)
-                .order_by("due_date", "priority_order")
-            )
-
+        #Todo handle if list_id is not a number
+        tasks = (
+            Task.objects.filter(to_do_lists__user=self.request.user)
+            .annotate(priority_order=priority_order)
+            .order_by("due_date", "priority_order")
+        )
+        if 'list_id' in self.request.query_params:
+            tasks = tasks.filter(to_do_lists__id=self.request.query_params["list_id"])
         return tasks

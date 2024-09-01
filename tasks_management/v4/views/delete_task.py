@@ -9,6 +9,7 @@ class DeleteTaskView(generics.RetrieveUpdateAPIView):
     serializer_class = DeleteTaskSerializer
     queryset = Task.objects.all()
 
+    #Todo override get queryset delete lines 14 15 16 and use get object. lines 19 and 20 should go to serializer
     def update(self, request, *args, **kwargs):
         if not Task.objects.filter(id=self.kwargs['task_id']).exists():
             return Response("invalid id")
